@@ -4,5 +4,5 @@ create table cryptocurrencies(
     coingecko_id varchar(255) not null,
     github varchar(255),
     gitlab varchar(255),
-    description text not null
+    description text
 )

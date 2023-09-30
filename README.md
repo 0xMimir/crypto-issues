@@ -2,6 +2,11 @@
 
 Scan crypto currency repositories for open issues. 
 
+To generate store run: 
+```sh
+sea generate entity --lib -o libs/store/src
+```
+
 ## Tasks:
     * Create api for coin gecko
       * fetch all assets

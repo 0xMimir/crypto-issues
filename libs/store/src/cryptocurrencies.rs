@@ -11,8 +11,8 @@ pub struct Model {
     pub coingecko_id: String,
     pub github: Option<String>,
     pub gitlab: Option<String>,
-    #[sea_orm(column_type = "Text")]
-    pub description: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub description: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
