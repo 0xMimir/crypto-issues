@@ -3,6 +3,12 @@
 Scan crypto currency repositories for open issues. 
 
 ## Tasks:
+    * Create api for coin gecko
+      * fetch all assets
+      * fetch all assets info
+    * Create api for coingecko
+      * fetch all assets
+      * fetch all assets info
     * Create cron to update crypto currencies.
     * Create table to hold repository info.
     * Create cron to add repository data.
