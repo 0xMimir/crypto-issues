@@ -3,5 +3,5 @@
 #[macro_use]
 extern crate serde;
 
-mod coingecko;
-mod github;
+pub mod coingecko;
+pub mod github;
