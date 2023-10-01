@@ -2,10 +2,10 @@ use std::sync::Arc;
 
 use api::info::{
     infrastructure::{PgRepository, PgService},
-    Init,
+    Info,
 };
-use sdks::coingecko::CoinGecko;
 use config::dotenv_init;
+use sdks::coingecko::CoinGecko;
 use sea_orm::Database;
 
 #[tokio::main]
@@ -23,7 +23,7 @@ async fn main() {
     let service = PgService::new(conn);
     let coingecko = CoinGecko::default();
 
-    let init = Init::new(repository, service, coingecko);
+    let init = Info::new(repository, service, coingecko);
 
     init.preform_init().await.unwrap();
 }

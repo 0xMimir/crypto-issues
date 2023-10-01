@@ -61,21 +61,21 @@ impl ReposUrl {
 }
 
 #[derive(Deserialize)]
-pub(crate) struct ErrorResponse{
-    pub status: ErrorStatus
+pub(crate) struct ErrorResponse {
+    pub status: ErrorStatus,
 }
 
 #[derive(Deserialize)]
-pub(crate)struct ErrorStatus{
+pub(crate) struct ErrorStatus {
     pub error_code: u16,
-    pub error_message: String
+    pub error_message: String,
 }
 
-impl From<ErrorResponse> for Error{
+impl From<ErrorResponse> for Error {
     fn from(value: ErrorResponse) -> Self {
-        match value.status.error_code{
+        match value.status.error_code {
             429 => Error::RateLimitExceeded,
-            _ => Error::InternalServer(value.status.error_message)
+            _ => Error::InternalServer(value.status.error_message),
         }
     }
 }

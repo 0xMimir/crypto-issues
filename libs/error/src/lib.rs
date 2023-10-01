@@ -20,5 +20,5 @@ pub enum Error {
     InternalServer(String),
 
     #[error("Rate limit exceeded")]
-    RateLimitExceeded
+    RateLimitExceeded,
 }

@@ -17,6 +17,7 @@ impl PgRepository {
     }
 }
 
+#[async_trait]
 impl DbRepositoryContract for PgRepository {
     async fn get_assets_without_info(&self) -> Result<Vec<(Uuid, String)>> {
         let query = Entity::find()

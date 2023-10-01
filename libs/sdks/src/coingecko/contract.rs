@@ -2,6 +2,7 @@ use error::Result;
 
 use super::data::{CryptoInfo, SimpleCoin};
 
+#[async_trait]
 pub trait CoinGeckoContract {
     ///
     /// Return all assets for coingecko

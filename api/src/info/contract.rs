@@ -1,7 +1,8 @@
-use sdks::coingecko::CryptoInfo;
 use error::Result;
+use sdks::coingecko::CryptoInfo;
 use sea_orm::prelude::Uuid;
 
+#[async_trait]
 pub trait DbRepositoryContract {
     ///
     /// Get items from `cryptocurrencies` that don't have neither github, nor gitlab, nor description
@@ -9,6 +10,7 @@ pub trait DbRepositoryContract {
     async fn get_assets_without_info(&self) -> Result<Vec<(Uuid, String)>>;
 }
 
+#[async_trait]
 pub trait DbServiceContract {
     ///
     /// Insert into `cryptocurrencies` table

@@ -1,5 +1,6 @@
 use error::Result;
 
+#[async_trait]
 pub trait GithubContract {
     ///
     /// Returns repos for github username for page

@@ -1,5 +1,5 @@
-use sdks::coingecko::CryptoInfo;
 use error::Result;
+use sdks::coingecko::CryptoInfo;
 use sea_orm::{
     prelude::Uuid, sea_query::OnConflict, ActiveModelTrait, ActiveValue::Set, DatabaseConnection,
     EntityTrait, Unchanged,
@@ -19,6 +19,7 @@ impl PgService {
     }
 }
 
+#[async_trait]
 impl DbServiceContract for PgService {
     async fn insert_crypto(&self, name: String, coingecko_id: String) -> Result<()> {
         let value = ActiveModel {

@@ -11,9 +11,11 @@ error.workspace = true
 store.workspace = true
 log.workspace = true
 tokio.workspace = true
-sea-orm.workspace = true 
+sea-orm.workspace = true
 config.workspace = true
-env_logger = "0.10.0"
+env_logger.workspace = true
+tokio-cron-scheduler.workspace = true
+async-trait.workspace = true
 
 [[bin]]
 path = "src/main.rs"
