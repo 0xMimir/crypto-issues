@@ -1,8 +1,8 @@
 mod contract;
 mod domain;
-mod infrastructure;
+pub mod infrastructure;
 
-use domain::GithubRepositoriesCron;
+pub use domain::GithubRepositoriesCron;
 use infrastructure::{PgRepository, PgService};
 use sdks::github::Github;
 use sea_orm::DatabaseConnection;

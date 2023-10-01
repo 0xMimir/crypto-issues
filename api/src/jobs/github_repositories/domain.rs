@@ -39,7 +39,7 @@ impl<
     ///
     /// Cron job that runs once a week
     ///
-    async fn cron_job(&self) -> Result<()> {
+    pub async fn cron_job(&self) -> Result<()> {
         let projects = self.repository.get_projects().await?;
 
         for project in projects {
