@@ -8,8 +8,6 @@ sea generate entity --lib -o libs/store/src
 ```
 
 ## Tasks:
-    * Create api for coin gecko
-      * fetch all assets info
     * Create api for coingecko
       * fetch all assets
       * fetch all assets info

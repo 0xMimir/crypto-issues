@@ -4,15 +4,15 @@ use api::init::{
     infrastructure::{PgRepository, PgService},
     Init,
 };
-use apis::coingecko::CoinGecko;
+use sdks::coingecko::CoinGecko;
 use config::dotenv_init;
 use sea_orm::Database;
 
 #[tokio::main]
 async fn main() {
-    env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .init();
+    // env_logger::builder()
+    //     .filter_level(log::LevelFilter::Info)
+    //     .init();
 
     dotenv_init();
     let db_url = config::get("DATABASE_URL").unwrap();

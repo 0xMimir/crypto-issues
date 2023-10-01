@@ -1,4 +1,4 @@
-use apis::coingecko::CryptoInfo;
+use sdks::coingecko::CryptoInfo;
 use error::Result;
 use sea_orm::prelude::Uuid;
 

@@ -1,6 +1,9 @@
+use std::time::Duration;
+
 use super::contract::{DbRepositoryContract, DbServiceContract};
-use apis::coingecko::CoinGeckoContract;
-use error::Result;
+use sdks::coingecko::CoinGeckoContract;
+use error::{Error,Result};
+use tokio::time::sleep;
 
 pub struct Init<
     Repository: DbRepositoryContract,
@@ -44,14 +47,25 @@ impl<
     }
 
     async fn update_info(&self) -> Result<()> {
-        let cryptocurrencies = self.repository.get_assets_without_info().await?;
+        let mut cryptocurrencies = self.repository.get_assets_without_info().await?;
 
-        for (id, coingecko_id) in cryptocurrencies {
-            let info = self.coingecko.get_info(&coingecko_id).await?;
-            if let Err(error) = self.service.update_info(id, info).await {
+        while let Some((id, coingecko_id)) = cryptocurrencies.last(){
+            let info = match self.coingecko.get_info(&coingecko_id).await{
+                Ok(info) => info,
+                Err(Error::RateLimitExceeded) => {
+                    sleep(Duration::from_secs(60)).await;
+                    continue;
+                },
+                Err(error) => return Err(error)
+            };
+            
+            if let Err(error) = self.service.update_info(*id, info).await {
                 error!("{}", error);
             }
+
+            cryptocurrencies.pop();
         }
+
 
         Ok(())
     }

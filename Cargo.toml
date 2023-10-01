@@ -12,6 +12,6 @@ log = "0.4.20"
 dotenv = "0.15.0"
 
 error.path = "libs/error"
-apis.path = "libs/apis"
+sdks.path = "libs/sdks"
 store.path = "libs/store"
 config.path = "libs/config"

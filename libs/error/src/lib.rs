@@ -15,4 +15,10 @@ pub enum Error {
 
     #[error("Not found: {0}")]
     NotFound(String),
+
+    #[error("Internal server error: {0}")]
+    InternalServer(String),
+
+    #[error("Rate limit exceeded")]
+    RateLimitExceeded
 }

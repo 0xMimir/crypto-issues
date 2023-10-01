@@ -1,3 +1,5 @@
+use error::Error;
+
 #[derive(Deserialize)]
 pub struct SimpleCoin {
     pub id: String,
@@ -55,5 +57,25 @@ impl ReposUrl {
         let url = self.github.into_iter().next()?;
         let url = url.replace("https://github.com/", "");
         Some(url.split_once('/')?.0.to_owned())
+    }
+}
+
+#[derive(Deserialize)]
+pub(crate) struct ErrorResponse{
+    pub status: ErrorStatus
+}
+
+#[derive(Deserialize)]
+pub(crate)struct ErrorStatus{
+    pub error_code: u16,
+    pub error_message: String
+}
+
+impl From<ErrorResponse> for Error{
+    fn from(value: ErrorResponse) -> Self {
+        match value.status.error_code{
+            429 => Error::RateLimitExceeded,
+            _ => Error::InternalServer(value.status.error_message)
+        }
     }
 }
