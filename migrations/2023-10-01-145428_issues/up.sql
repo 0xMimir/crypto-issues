@@ -4,5 +4,7 @@ create table issues(
     issue bigint not null,
     title text not null,
     description text,
-    created_at timestamp not null
+    created_at timestamp not null,
+    closed boolean not null,
+    unique(repository, issue)
 )

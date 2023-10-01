@@ -51,7 +51,7 @@ impl GithubContract for Github {
         page: u64,
     ) -> Result<Vec<GithubIssue>> {
         let url = format!(
-            "https://api.github.com/repos/{project}/{repository}/issues?page={page}&per_page=100"
+            "https://api.github.com/repos/{project}/{repository}/issues?state=all&page={page}&per_page=100"
         );
         self.get(url).await
     }

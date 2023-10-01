@@ -21,11 +21,19 @@ pub enum Relation {
         on_delete = "NoAction"
     )]
     GithubProjects,
+    #[sea_orm(has_many = "super::issues::Entity")]
+    Issues,
 }
 
 impl Related<super::github_projects::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::GithubProjects.def()
+    }
+}
+
+impl Related<super::issues::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Issues.def()
     }
 }
 

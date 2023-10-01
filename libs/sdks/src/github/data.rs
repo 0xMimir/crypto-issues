@@ -28,7 +28,7 @@ impl From<ErrorResponse> for Error {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 pub struct GithubIssue {
     pub id: i64,
     pub title: String,
@@ -36,6 +36,14 @@ pub struct GithubIssue {
     pub description: String,
     #[serde(deserialize_with = "deserialize_datetime")]
     pub created_at: NaiveDateTime,
+    pub state: State,
+}
+
+#[derive(Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum State {
+    Closed,
+    Open,
 }
 
 pub fn deserialize_datetime<'de, D: Deserializer<'de>>(

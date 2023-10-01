@@ -1,5 +1,5 @@
+pub mod data;
 mod contract;
-mod data;
 mod domain;
 
 pub use contract::GithubContract;
