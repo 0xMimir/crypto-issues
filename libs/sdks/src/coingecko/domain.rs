@@ -5,7 +5,8 @@ use super::{
     CoinGeckoContract, SimpleCoin,
 };
 use error::Result;
-use reqwest::Client;
+use reqwest::{Client, IntoUrl};
+use serde::de::DeserializeOwned;
 
 const COINS_LIST_URL: &str = "https://api.coingecko.com/api/v3/coins/list";
 
@@ -14,14 +15,16 @@ pub struct CoinGecko {
     pub(crate) client: Client,
 }
 
-#[async_trait]
-impl CoinGeckoContract for CoinGecko {
-    async fn get_info(&self, id: &str) -> Result<CryptoInfo> {
-        let url = format!("https://api.coingecko.com/api/v3/coins/{}?localization=false&tickers=false&market_data=false&community_data=false&sparkline=false", id);
+impl CoinGecko {
+    async fn get<U, R>(&self, url: U) -> Result<R>
+    where
+        U: IntoUrl + Send + Sync,
+        R: DeserializeOwned + 'static,
+    {
         let response = self.client.get(url).send().await?.text().await?;
 
-        let error = match serde_json::from_str::<CryptoInfoResponse>(&response) {
-            Ok(response) => return Ok(response.into()),
+        let error = match serde_json::from_str(&response) {
+            Ok(response) => return Ok(response),
             Err(error) => error,
         };
 
@@ -30,10 +33,17 @@ impl CoinGeckoContract for CoinGecko {
             Err(_) => Err(error.into()),
         }
     }
+}
+
+#[async_trait]
+impl CoinGeckoContract for CoinGecko {
+    async fn get_info(&self, id: &str) -> Result<CryptoInfo> {
+        let url = format!("https://api.coingecko.com/api/v3/coins/{}?localization=false&tickers=false&market_data=false&community_data=false&sparkline=false", id);
+        let response = self.get::<_, CryptoInfoResponse>(url).await?;
+        Ok(response.into())
+    }
 
     async fn list_cryptocurrencies(&self) -> Result<Vec<SimpleCoin>> {
-        let response = self.client.get(COINS_LIST_URL).send().await?.text().await?;
-        let coins = serde_json::from_str(&response)?;
-        Ok(coins)
+        self.get(COINS_LIST_URL).await
     }
 }

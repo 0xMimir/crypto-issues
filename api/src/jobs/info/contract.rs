@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use error::Result;
 use sdks::coingecko::{CryptoInfo, SimpleCoin};
 use sea_orm::prelude::Uuid;
@@ -8,6 +10,11 @@ pub trait DbRepositoryContract {
     /// Get items from `cryptocurrencies` that don't have neither github, nor gitlab, nor description
     ///
     async fn get_assets_without_info(&self) -> Result<Vec<(Uuid, String)>>;
+
+    ///
+    /// Get github projects
+    ///
+    async fn get_projects(&self) -> Result<HashMap<String, Uuid>>;
 }
 
 #[async_trait]

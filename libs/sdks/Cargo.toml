@@ -6,7 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "0.1.73"
+async-trait.workspace = true
+chrono.workspace = true
 error.workspace = true
 reqwest.workspace = true
 serde.workspace = true

@@ -60,6 +60,7 @@ impl<
             let repositories = match self.github.get_repos(&github.name, page).await {
                 Ok(repos) => repos,
                 Err(Error::RateLimitExceeded) => {
+                    warn!("Rate limit exceeded sleeping for 10 minutes");
                     sleep(Duration::from_secs(6000)).await;
                     continue;
                 }

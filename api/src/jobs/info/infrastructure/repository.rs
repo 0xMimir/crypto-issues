@@ -2,10 +2,13 @@ use error::Result;
 use sea_orm::{
     prelude::Uuid, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QuerySelect,
 };
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use super::super::contract::DbRepositoryContract;
-use store::cryptocurrencies::{Column, Entity};
+use store::{
+    cryptocurrencies::{Column, Entity},
+    github_projects::{Column as GithubColumn, Entity as GithubEntity},
+};
 
 pub struct PgRepository {
     conn: Arc<DatabaseConnection>,
@@ -30,8 +33,19 @@ impl DbRepositoryContract for PgRepository {
             .all(self.conn.as_ref())
             .await?;
 
-        // println!("{}", query.to_string());
-
         Ok(query)
+    }
+
+    async fn get_projects(&self) -> Result<HashMap<String, Uuid>> {
+        let projects = GithubEntity::find()
+            .select_only()
+            .columns([GithubColumn::Name, GithubColumn::Id])
+            .into_tuple()
+            .all(self.conn.as_ref())
+            .await?
+            .into_iter()
+            .collect();
+
+        Ok(projects)
     }
 }

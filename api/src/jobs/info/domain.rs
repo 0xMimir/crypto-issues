@@ -1,12 +1,7 @@
-use std::{
-    collections::HashMap,
-    time::{Duration, Instant},
-};
-
 use super::contract::{DbRepositoryContract, DbServiceContract};
 use error::{Error, Result};
 use sdks::coingecko::CoinGeckoContract;
-use sea_orm::prelude::Uuid;
+use std::time::{Duration, Instant};
 use tokio::{
     task::JoinHandle,
     time::{interval_at, sleep},
@@ -63,12 +58,14 @@ impl<
     async fn update_info(&self) -> Result<()> {
         let mut cryptocurrencies = self.repository.get_assets_without_info().await?;
 
-        let mut github_ids: HashMap<String, Uuid> = HashMap::new();
+        let mut github_ids = self.repository.get_projects().await?;
 
         while let Some((id, coingecko_id)) = cryptocurrencies.last() {
+            println!("{} {}", id, coingecko_id);
             let info = match self.coingecko.get_info(&coingecko_id).await {
                 Ok(info) => info,
                 Err(Error::RateLimitExceeded) => {
+                    warn!("Rate limit exceeded sleeping for minute");
                     sleep(Duration::from_secs(60)).await;
                     continue;
                 }

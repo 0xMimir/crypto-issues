@@ -1,29 +1,77 @@
-use super::{data::GithubRepository, GithubContract};
+use super::{
+    data::{ErrorResponse, GithubRepository, GithubIssue},
+    GithubContract,
+};
 use error::{Error, Result};
-use reqwest::{Client, StatusCode};
+use reqwest::{
+    header::{HeaderName, HeaderValue},
+    Client, ClientBuilder, IntoUrl,
+};
+use serde::de::DeserializeOwned;
 
-#[derive(Default)]
 pub struct Github {
     client: Client,
+}
+
+impl Default for Github {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl Github {
+    pub fn new() -> Self {
+        let client = ClientBuilder::new()
+            .default_headers(
+                [(
+                    HeaderName::from_static("user-agent"),
+                    HeaderValue::from_static("crypto-issues"),
+                )]
+                .into_iter()
+                .collect(),
+            )
+            .build()
+            .expect("Error creating client");
+
+        Self { client }
+    }
 }
 
 #[async_trait]
 impl GithubContract for Github {
     async fn get_repos(&self, username: &str, page: u64) -> Result<Vec<String>> {
         let url = format!("https://api.github.com/users/{username}/repos?page={page}&per_page=100");
+        let response = self.get(url).await?;
+        Ok(GithubRepository::into(response))
+    }
 
-        let response = self.client.get(url).send().await?;
-        let status = response.status();
-        let response = response.text().await?;
+    async fn get_issues(
+        &self,
+        project: &str,
+        repository: &str,
+        page: u64,
+    ) -> Result<Vec<GithubIssue>> {
+        let url = format!(
+            "https://api.github.com/repos/{project}/{repository}/issues?page={page}&per_page=100"
+        );
+        self.get(url).await
+    }
+}
 
-        if let Ok(response) = serde_json::from_str::<Vec<GithubRepository>>(&response) {
-            return Ok(GithubRepository::into(response));
+impl Github {
+    async fn get<U, R>(&self, url: U) -> Result<R>
+    where
+        U: IntoUrl,
+        R: DeserializeOwned + 'static,
+    {
+        let response = self.client.get(url).send().await?.text().await?;
+
+        if let Ok(response) = serde_json::from_str(&response) {
+            return Ok(response);
         }
 
-        match status {
-            StatusCode::NOT_FOUND => Err(Error::NotFound(username.to_owned())),
-            StatusCode::TOO_MANY_REQUESTS => Err(Error::RateLimitExceeded),
-            _ => Err(Error::InternalServer(response)),
+        match serde_json::from_str::<ErrorResponse>(&response) {
+            Ok(error) => Err(error.into()),
+            Err(_) => Err(Error::InternalServer(response)),
         }
     }
 }

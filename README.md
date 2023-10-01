@@ -11,7 +11,7 @@ sea generate entity --lib -o libs/store/src
     * Create api for coingecko
       * fetch all assets
       * fetch all assets info
-    * Create cron to scan over repositores for issues.
+    * Create cron to scan over repositories for issues.
     * Create cron to check if issue has been closed.
     * Create api routes
     * Create openapi docs
