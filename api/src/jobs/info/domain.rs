@@ -61,7 +61,6 @@ impl<
         let mut github_ids = self.repository.get_projects().await?;
 
         while let Some((id, coingecko_id)) = cryptocurrencies.last() {
-            println!("{} {}", id, coingecko_id);
             let info = match self.coingecko.get_info(&coingecko_id).await {
                 Ok(info) => info,
                 Err(Error::RateLimitExceeded) => {
