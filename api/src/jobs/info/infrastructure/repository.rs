@@ -30,6 +30,8 @@ impl DbRepositoryContract for PgRepository {
             .all(self.conn.as_ref())
             .await?;
 
+        // println!("{}", query.to_string());
+
         Ok(query)
     }
 }

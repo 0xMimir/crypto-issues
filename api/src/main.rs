@@ -1,11 +1,7 @@
 use std::{sync::Arc, time::Duration};
 
-use api::jobs::info::{
-    infrastructure::{PgRepository, PgService},
-    Info,
-};
+use api::jobs;
 use config::dotenv_init;
-use sdks::coingecko::CoinGecko;
 use sea_orm::Database;
 use tokio::time::interval;
 
@@ -18,15 +14,9 @@ async fn main() {
     dotenv_init();
     let db_url = config::get("DATABASE_URL").unwrap();
     let pool = Database::connect(db_url).await.unwrap();
-    let conn = Arc::new(pool);
+    let sea_pool = Arc::new(pool);
 
-    let repository = PgRepository::new(conn.clone());
-    let service = PgService::new(conn);
-    let coingecko = CoinGecko::default();
-
-    let init = Info::new(repository, service, coingecko);
-
-    let _handle = init.spawn_cron();
+    let _handles = jobs::setup(sea_pool);
 
     let mut period = interval(Duration::from_millis(100));
     loop {

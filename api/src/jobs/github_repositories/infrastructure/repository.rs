@@ -1,9 +1,9 @@
 use error::Result;
-use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QuerySelect};
+use sea_orm::{DatabaseConnection, EntityTrait};
 use std::sync::Arc;
 
 use super::super::contract::DbRepositoryContract;
-use store::cryptocurrencies::{Column, Entity};
+use store::github_projects::{Entity, Model};
 
 pub struct PgRepository {
     conn: Arc<DatabaseConnection>,
@@ -17,15 +17,8 @@ impl PgRepository {
 
 #[async_trait]
 impl DbRepositoryContract for PgRepository {
-    async fn get_projects(&self) -> Result<Vec<String>> {
-        let projects = Entity::find()
-            .filter(Column::Github.is_not_null())
-            .select_only()
-            .column(Column::Github)
-            .into_tuple()
-            .all(self.conn.as_ref())
-            .await?;
-
+    async fn get_projects(&self) -> Result<Vec<Model>> {
+        let projects = Entity::find().all(self.conn.as_ref()).await?;
         Ok(projects)
     }
 }

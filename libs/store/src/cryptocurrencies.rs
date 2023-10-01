@@ -11,9 +11,7 @@ pub struct Model {
     pub name: String,
     #[sea_orm(unique)]
     pub coingecko_id: String,
-    #[sea_orm(unique)]
-    pub github: Option<String>,
-    #[sea_orm(unique)]
+    pub github: Option<Uuid>,
     pub gitlab: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,
@@ -21,13 +19,19 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::github_repositories::Entity")]
-    GithubRepositories,
+    #[sea_orm(
+        belongs_to = "super::github_projects::Entity",
+        from = "Column::Github",
+        to = "super::github_projects::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    GithubProjects,
 }
 
-impl Related<super::github_repositories::Entity> for Entity {
+impl Related<super::github_projects::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::GithubRepositories.def()
+        Relation::GithubProjects.def()
     }
 }
 

@@ -1,13 +1,13 @@
 use std::time::{Duration, Instant};
 
+use super::contract::{DbRepositoryContract, DbServiceContract};
 use error::{Error, Result};
 use sdks::github::GithubContract;
+use store::github_projects::Model;
 use tokio::{
     task::JoinHandle,
     time::{interval_at, sleep},
 };
-
-use super::contract::{DbRepositoryContract, DbServiceContract};
 
 pub struct GithubRepositoriesCron<
     Repository: DbRepositoryContract,
@@ -53,11 +53,11 @@ impl<
     ///
     /// Download all repos for github project
     ///
-    async fn download_repos_for_project(&self, username: String) -> Result<()> {
+    async fn download_repos_for_project(&self, github: Model) -> Result<()> {
         let mut page = 1;
 
         loop {
-            let repositories = match self.github.get_repos(&username, page).await {
+            let repositories = match self.github.get_repos(&github.name, page).await {
                 Ok(repos) => repos,
                 Err(Error::RateLimitExceeded) => {
                     sleep(Duration::from_secs(6000)).await;
@@ -71,7 +71,7 @@ impl<
             }
 
             self.service
-                .create_repository(username.clone(), repositories)
+                .create_repository(github.id, repositories)
                 .await?;
             page += 1;
         }

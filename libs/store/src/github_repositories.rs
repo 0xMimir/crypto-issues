@@ -7,25 +7,25 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
-    pub project: String,
+    pub project: Uuid,
     pub repository_name: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::cryptocurrencies::Entity",
+        belongs_to = "super::github_projects::Entity",
         from = "Column::Project",
-        to = "super::cryptocurrencies::Column::Github",
+        to = "super::github_projects::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Cryptocurrencies,
+    GithubProjects,
 }
 
-impl Related<super::cryptocurrencies::Entity> for Entity {
+impl Related<super::github_projects::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Cryptocurrencies.def()
+        Relation::GithubProjects.def()
     }
 }
 

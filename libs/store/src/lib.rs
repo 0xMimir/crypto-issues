@@ -3,4 +3,5 @@
 pub mod prelude;
 
 pub mod cryptocurrencies;
+pub mod github_projects;
 pub mod github_repositories;

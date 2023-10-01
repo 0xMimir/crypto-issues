@@ -55,6 +55,9 @@ impl From<CryptoInfoResponse> for CryptoInfo {
 impl ReposUrl {
     pub fn extract_github(self) -> Option<String> {
         let url = self.github.into_iter().next()?;
+        if !url.starts_with("https://github.com/") {
+            return None;
+        }
         let url = url.replace("https://github.com/", "");
         Some(url.split_once('/')?.0.to_owned())
     }

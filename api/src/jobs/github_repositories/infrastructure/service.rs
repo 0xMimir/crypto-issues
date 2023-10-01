@@ -1,5 +1,7 @@
 use error::Result;
-use sea_orm::{sea_query::OnConflict, ActiveValue::Set, DatabaseConnection, EntityTrait};
+use sea_orm::{
+    prelude::Uuid, sea_query::OnConflict, ActiveValue::Set, DatabaseConnection, EntityTrait,
+};
 use std::sync::Arc;
 
 use super::super::contract::DbServiceContract;
@@ -17,7 +19,7 @@ impl PgService {
 
 #[async_trait]
 impl DbServiceContract for PgService {
-    async fn create_repository(&self, project: String, repositories: Vec<String>) -> Result<()> {
+    async fn create_repository(&self, project: Uuid, repositories: Vec<String>) -> Result<()> {
         let models = repositories
             .into_iter()
             .map(|repository_name| ActiveModel {

@@ -1,8 +1,12 @@
-use std::time::{Duration, Instant};
+use std::{
+    collections::HashMap,
+    time::{Duration, Instant},
+};
 
 use super::contract::{DbRepositoryContract, DbServiceContract};
 use error::{Error, Result};
 use sdks::coingecko::CoinGeckoContract;
+use sea_orm::prelude::Uuid;
 use tokio::{
     task::JoinHandle,
     time::{interval_at, sleep},
@@ -49,13 +53,7 @@ impl<
     ///
     async fn initial_download(&self) -> Result<()> {
         let cryptocurrencies = self.coingecko.list_cryptocurrencies().await?;
-
-        for crypto in cryptocurrencies {
-            if let Err(error) = self.service.insert_crypto(crypto.name, crypto.id).await {
-                error!("{}", error);
-            }
-        }
-
+        self.service.insert_crypto(cryptocurrencies).await?;
         Ok(())
     }
 
@@ -64,6 +62,8 @@ impl<
     ///
     async fn update_info(&self) -> Result<()> {
         let mut cryptocurrencies = self.repository.get_assets_without_info().await?;
+
+        let mut github_ids: HashMap<String, Uuid> = HashMap::new();
 
         while let Some((id, coingecko_id)) = cryptocurrencies.last() {
             let info = match self.coingecko.get_info(&coingecko_id).await {
@@ -75,7 +75,19 @@ impl<
                 Err(error) => return Err(error),
             };
 
-            if let Err(error) = self.service.update_info(*id, info).await {
+            let github = match &info.github {
+                Some(project) => match github_ids.get(project) {
+                    Some(id) => Some(*id),
+                    None => {
+                        let github = self.service.create_github(project.to_owned()).await?;
+                        github_ids.insert(project.to_owned(), github);
+                        Some(github)
+                    }
+                },
+                None => None,
+            };
+
+            if let Err(error) = self.service.update_info(*id, info, github).await {
                 error!("{}", error);
             }
 
