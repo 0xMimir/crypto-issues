@@ -1,6 +1,6 @@
 use std::{sync::Arc, time::Duration};
 
-use api::info::{
+use api::jobs::info::{
     infrastructure::{PgRepository, PgService},
     Info,
 };
