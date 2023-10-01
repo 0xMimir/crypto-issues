@@ -1,2 +1,2 @@
+pub mod github_repositories;
 pub mod info;
-pub mod github;
