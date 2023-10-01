@@ -7,15 +7,28 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
+    #[sea_orm(unique)]
     pub name: String,
+    #[sea_orm(unique)]
     pub coingecko_id: String,
+    #[sea_orm(unique)]
     pub github: Option<String>,
+    #[sea_orm(unique)]
     pub gitlab: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::github_repositories::Entity")]
+    GithubRepositories,
+}
+
+impl Related<super::github_repositories::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::GithubRepositories.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
