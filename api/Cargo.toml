@@ -20,5 +20,5 @@ path = "src/main.rs"
 name = "api"
 
 [[bin]]
-path = "src/init/main.rs"
+path = "src/info/main.rs"
 name = "init"

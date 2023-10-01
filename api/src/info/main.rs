@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use api::init::{
+use api::info::{
     infrastructure::{PgRepository, PgService},
     Init,
 };
@@ -10,9 +10,9 @@ use sea_orm::Database;
 
 #[tokio::main]
 async fn main() {
-    // env_logger::builder()
-    //     .filter_level(log::LevelFilter::Info)
-    //     .init();
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .init();
 
     dotenv_init();
     let db_url = config::get("DATABASE_URL").unwrap();

@@ -3,4 +3,4 @@
 #[macro_use]
 extern crate log;
 
-pub mod init;
+pub mod info;
