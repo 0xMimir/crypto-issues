@@ -27,7 +27,7 @@ impl DbServiceContract for PgService {
                 repository: Set(repository_id),
                 issue: Set(issue.id),
                 title: Set(issue.title),
-                description: Set(Some(issue.description)),
+                description: Set(issue.description),
                 created_at: Set(issue.created_at),
                 closed: Set(issue.state == State::Closed),
                 ..Default::default()

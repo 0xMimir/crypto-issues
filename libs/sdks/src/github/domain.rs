@@ -1,5 +1,5 @@
 use super::{
-    data::{ErrorResponse, GithubRepository, GithubIssue},
+    data::{ErrorResponse, GithubIssue, GithubRepository},
     GithubContract,
 };
 use error::{Error, Result};
@@ -34,13 +34,36 @@ impl Github {
 
         Self { client }
     }
+
+    pub fn new_with_auth(api_key: String) -> Self {
+        let client = ClientBuilder::new()
+            .default_headers(
+                [
+                    (
+                        HeaderName::from_static("user-agent"),
+                        HeaderValue::from_static("crypto-issues"),
+                    ),
+                    (
+                        HeaderName::from_static("authorization"),
+                        HeaderValue::from_str(format!("Bearer {}", api_key).as_str()).unwrap(),
+                    ),
+                ]
+                .into_iter()
+                .collect(),
+            )
+            .build()
+            .expect("Error creating client");
+
+        Self { client }
+    }
 }
 
 #[async_trait]
 impl GithubContract for Github {
     async fn get_repos(&self, username: &str, page: u64) -> Result<Vec<String>> {
         let url = format!("https://api.github.com/users/{username}/repos?page={page}&per_page=100");
-        let response = self.get(url).await?;
+        let response = self.get(url).await.map_err(|e| e.add_cause(username))?;
+
         Ok(GithubRepository::into(response))
     }
 
@@ -53,7 +76,9 @@ impl GithubContract for Github {
         let url = format!(
             "https://api.github.com/repos/{project}/{repository}/issues?state=all&page={page}&per_page=100"
         );
-        self.get(url).await
+        self.get(url)
+            .await
+            .map_err(|e| e.add_cause(format!("{}/{}", project, repository)))
     }
 }
 

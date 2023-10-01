@@ -24,6 +24,10 @@ impl From<ErrorResponse> for Error {
             return Error::RateLimitExceeded;
         }
 
+        if value.message.starts_with("Not Found"){
+            return Error::NotFound;
+        }
+
         Self::InternalServer(value.message)
     }
 }
@@ -33,7 +37,7 @@ pub struct GithubIssue {
     pub id: i64,
     pub title: String,
     #[serde(rename = "body")]
-    pub description: String,
+    pub description: Option<String>,
     #[serde(deserialize_with = "deserialize_datetime")]
     pub created_at: NaiveDateTime,
     pub state: State,
