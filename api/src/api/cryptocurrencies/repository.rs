@@ -1,6 +1,14 @@
-use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter, ColumnTrait, QuerySelect};
+use error::{Error, Result};
+use sea_orm::{
+    sea_query::Expr, ColumnTrait, DatabaseConnection, EntityTrait, JoinType, QueryFilter,
+    QuerySelect, RelationTrait, SelectColumns,
+};
 use std::sync::Arc;
-use store::{cryptocurrencies, github_projects, github_repositories, issues};
+use store::{
+    cryptocurrencies, github_projects, github_repositories, issues, objects::CryptoCurrencyView,
+};
+
+use super::contract::DbRepositoryContract;
 
 pub struct PgRepository {
     conn: Arc<DatabaseConnection>,
@@ -12,41 +20,38 @@ impl PgRepository {
     }
 }
 
-impl PgRepository {
-    pub fn fetch(&self) {
-        let query = github_projects::Entity::find()
+#[async_trait]
+impl DbRepositoryContract for PgRepository {
+    async fn get_cryptocurrencies(&self) -> Result<Vec<CryptoCurrencyView>> {
+        github_projects::Entity::find()
             .inner_join(cryptocurrencies::Entity)
             .left_join(github_repositories::Entity)
+            .join_rev(
+                JoinType::LeftJoin,
+                issues::Relation::GithubRepositories.def(),
+            )
             .filter(github_repositories::Column::RepositoryName.is_not_null())
             .group_by(cryptocurrencies::Column::Id)
             .group_by(cryptocurrencies::Column::Name)
             .group_by(cryptocurrencies::Column::CoingeckoId)
-            .group_by(cryptocurrencies::Column::Github  )
-            .group_by(github_projects::Column::Name) ;
+            .group_by(cryptocurrencies::Column::Github)
+            .group_by(github_projects::Column::Name)
+            .select_only()
+            .columns([
+                cryptocurrencies::Column::Id,
+                cryptocurrencies::Column::Name,
+                cryptocurrencies::Column::CoingeckoId,
+            ])
+            .select_column_as(cryptocurrencies::Column::Github, "github_id")
+            .column_as(github_projects::Column::Name, "github")
+            .expr(Expr::cust_with_expr(
+                "array_agg(distinct $1) as repositories",
+                github_repositories::Column::RepositoryName.into_expr(),
+            ))
+            .column_as(issues::Column::Id.count(), "issues")
+            .into_model::<CryptoCurrencyView>()
+            .all(self.conn.as_ref())
+            .await
+            .map_err(Error::from)
     }
 }
-/*
-select
-	c.id,
-	c."name",
-	c.coingecko_id,
-	c.github,
-	gp."name",
-	array_agg(gr.repository_name),
-	count(i)
-from
-	cryptocurrencies c
-inner join github_projects gp on
-	gp.id = c.github
-left join github_repositories gr on
-	gr.project = gp.id
-left join issues i on
-	i.repository = gr.id
-where gr.repository_name notnull
-group by 
-	c.id,
-	c."name",
-	c.coingecko_id,
-	c.github,
-	gp."name"
-*/

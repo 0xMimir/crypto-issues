@@ -1,5 +1,7 @@
 use thiserror::Error;
 
+mod actix;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Error, Debug)]

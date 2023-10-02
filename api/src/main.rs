@@ -1,9 +1,7 @@
-use std::{sync::Arc, time::Duration};
-
-use api::jobs;
+use api::{create_api, setup_jobs};
 use config::dotenv_init;
 use sea_orm::Database;
-use tokio::time::interval;
+use std::sync::Arc;
 
 #[tokio::main]
 async fn main() {
@@ -16,10 +14,7 @@ async fn main() {
     let pool = Database::connect(db_url).await.unwrap();
     let sea_pool = Arc::new(pool);
 
-    let _handles = jobs::setup(sea_pool);
+    let _handles = setup_jobs(sea_pool.clone());
 
-    let mut period = interval(Duration::from_millis(100));
-    loop {
-        period.tick().await;
-    }
+    create_api(sea_pool).await.expect("Error starting server");
 }

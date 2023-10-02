@@ -9,3 +9,7 @@ pub fn get(key: &str) -> Result<String> {
 pub fn dotenv_init() {
     dotenv::dotenv().expect("Error running reading dotenv");
 }
+
+pub fn get_default(key: &str, default: &str) -> String{
+    get(key).unwrap_or(default.to_owned())
+}

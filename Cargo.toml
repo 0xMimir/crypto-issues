@@ -17,6 +17,8 @@ env_logger = "0.10.0"
 tokio-cron-scheduler = "0.9.4"
 async-trait = "0.1.73"
 chrono = { version = "0.4.31", features = ["serde"] }
+actix = "0.13.1"
+actix-web = "4.4.0"
 
 error.path = "libs/error"
 sdks.path = "libs/sdks"

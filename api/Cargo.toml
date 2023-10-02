@@ -16,6 +16,8 @@ config.workspace = true
 env_logger.workspace = true
 tokio-cron-scheduler.workspace = true
 async-trait.workspace = true
+actix.workspace = true
+actix-web.workspace = true
 
 [[bin]]
 path = "src/main.rs"
