@@ -40,7 +40,7 @@ impl<
 
     ///
     /// Get all github projects from db and call `handle_project` for every project
-    /// 
+    ///
     async fn cron_job(&self) -> Result<()> {
         let projects = self.repository.get_projects().await?;
         for project in projects {
@@ -53,7 +53,7 @@ impl<
 
     ///
     /// Get all repositories for project then call `handle_issues` for every repository
-    /// 
+    ///
     async fn handle_project(&self, project: GithubProject) -> Result<()> {
         let repositories = self.repository.get_project_repositories(project.id).await?;
 
@@ -67,7 +67,7 @@ impl<
 
     ///
     /// Scan first 500 issues
-    /// 
+    ///
     async fn handle_issues(&self, project: &str, repository: GithubRepository) -> Result<()> {
         let mut page = 1;
 

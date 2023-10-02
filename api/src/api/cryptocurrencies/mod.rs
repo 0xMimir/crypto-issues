@@ -21,4 +21,14 @@ pub fn setup(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
         resource("/api/{version}/crypto")
             .route(web::get().to(get_cryptocurrencies::<Cryptocurrencies<PgRepository>>)),
     );
+
+    config.service(
+        resource("/api/{version}/crypto/{id}")
+            .route(web::get().to(get_cryptocurrency_by_id::<Cryptocurrencies<PgRepository>>)),
+    );
+
+    config.service(
+        resource("/api/{version}/repository/{id}/issues")
+            .route(web::get().to(get_issues::<Cryptocurrencies<PgRepository>>)),
+    );
 }

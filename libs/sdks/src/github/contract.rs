@@ -11,6 +11,11 @@ pub trait GithubContract {
 
     ///
     /// Get issues for repository
-    /// 
-    async fn get_issues(&self, project: &str, repository: &str, page: u64) -> Result<Vec<GithubIssue>>;
+    ///
+    async fn get_issues(
+        &self,
+        project: &str,
+        repository: &str,
+        page: u64,
+    ) -> Result<Vec<GithubIssue>>;
 }

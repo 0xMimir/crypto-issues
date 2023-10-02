@@ -24,7 +24,7 @@ impl From<ErrorResponse> for Error {
             return Error::RateLimitExceeded;
         }
 
-        if value.message.starts_with("Not Found"){
+        if value.message.starts_with("Not Found") {
             return Error::NotFound;
         }
 

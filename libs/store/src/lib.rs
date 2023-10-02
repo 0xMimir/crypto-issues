@@ -1,4 +1,5 @@
-#[macro_use] extern crate serde;
+#[macro_use]
+extern crate serde;
 
 mod migrations;
 pub mod objects;

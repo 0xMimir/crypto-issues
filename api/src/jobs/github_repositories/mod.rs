@@ -17,7 +17,7 @@ pub fn setup(sea_pool: Arc<DatabaseConnection>) -> tokio::task::JoinHandle<()> {
         Some(api_key) => Github::new_with_auth(api_key),
         None => Github::default(),
     };
-    
+
     let cron = GithubRepositoriesCron::new(repository, service, github);
     cron.spawn_cron()
 }

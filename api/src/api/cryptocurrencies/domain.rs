@@ -1,6 +1,10 @@
 use super::contract::{CryptocurrenciesContract, DbRepositoryContract};
 use error::Result;
-use store::objects::CryptoCurrencyView;
+use sea_orm::prelude::Uuid;
+use store::{
+    issues::Model as Issue,
+    objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories},
+};
 
 pub struct Cryptocurrencies<A: DbRepositoryContract> {
     pub(super) repository: A,
@@ -10,5 +14,14 @@ pub struct Cryptocurrencies<A: DbRepositoryContract> {
 impl<A: DbRepositoryContract + Send + Sync> CryptocurrenciesContract for Cryptocurrencies<A> {
     async fn get_cryptocurrencies(&self) -> Result<Vec<CryptoCurrencyView>> {
         self.repository.get_cryptocurrencies().await
+    }
+    async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories> {
+        self.repository.get_cryptocurrency(id).await
+    }
+
+    async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issue>> {
+        self.repository
+            .get_issues_for_repository(repository_id)
+            .await
     }
 }

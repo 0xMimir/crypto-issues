@@ -1,11 +1,13 @@
 use error::{Error, Result};
 use sea_orm::{
-    sea_query::Expr, ColumnTrait, DatabaseConnection, EntityTrait, JoinType, QueryFilter,
-    QuerySelect, RelationTrait, SelectColumns,
+    prelude::Uuid, sea_query::Expr, ColumnTrait, DatabaseConnection, EntityTrait, JoinType,
+    PaginatorTrait, QueryFilter, QuerySelect, RelationTrait, SelectColumns,
 };
 use std::sync::Arc;
 use store::{
-    cryptocurrencies, github_projects, github_repositories, issues, objects::CryptoCurrencyView,
+    cryptocurrencies, github_projects, github_repositories,
+    issues::{self, Model as Issues},
+    objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories, Repository},
 };
 
 use super::contract::DbRepositoryContract;
@@ -22,6 +24,13 @@ impl PgRepository {
 
 #[async_trait]
 impl DbRepositoryContract for PgRepository {
+    async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issues>> {
+        issues::Entity::find()
+            .filter(issues::Column::Repository.eq(repository_id))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(Error::from)
+    }
     async fn get_cryptocurrencies(&self) -> Result<Vec<CryptoCurrencyView>> {
         github_projects::Entity::find()
             .inner_join(cryptocurrencies::Entity)
@@ -53,5 +62,58 @@ impl DbRepositoryContract for PgRepository {
             .all(self.conn.as_ref())
             .await
             .map_err(Error::from)
+    }
+
+    async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories> {
+        let cryptocurrency = cryptocurrencies::Entity::find_by_id(id)
+            .one(self.conn.as_ref())
+            .await?
+            .ok_or(Error::NotFoundWithCause(id.to_string()))?;
+
+        let github_id = cryptocurrency
+            .github
+            .ok_or(Error::NotFoundWithCause(format!(
+                "Github profile not found, id:{}",
+                id
+            )))?;
+
+        let github = github_projects::Entity::find_by_id(github_id)
+            .one(self.conn.as_ref())
+            .await?
+            .ok_or(Error::NotFoundWithCause(format!(
+                "Github not found, id:{}",
+                github_id.to_string()
+            )))?;
+
+        let repositories = github_repositories::Entity::find()
+            .filter(github_repositories::Column::Project.eq(github.id))
+            .select_only()
+            .columns([
+                github_repositories::Column::Id,
+                github_repositories::Column::RepositoryName,
+            ])
+            .into_model::<Repository>()
+            .all(self.conn.as_ref())
+            .await?;
+
+        let repository_ids = repositories
+            .iter()
+            .map(|repository| repository.id)
+            .collect::<Vec<_>>();
+
+        let issues = issues::Entity::find()
+            .filter(issues::Column::Repository.is_in(repository_ids))
+            .count(self.conn.as_ref())
+            .await?;
+
+        Ok(CryptoCurrencyWithRepositories {
+            id: cryptocurrency.id,
+            name: cryptocurrency.name,
+            coingecko_id: cryptocurrency.coingecko_id,
+            github_id,
+            github: github.name,
+            repositories,
+            issues,
+        })
     }
 }
