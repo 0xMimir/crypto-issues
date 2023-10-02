@@ -7,6 +7,7 @@ use self::{domain::Cryptocurrencies, handlers::*, repository::PgRepository};
 
 mod contract;
 pub(super) mod docs;
+mod data;
 mod domain;
 mod handlers;
 mod repository;

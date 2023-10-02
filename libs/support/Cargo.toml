@@ -1,14 +1,10 @@
 [package]
-name = "error"
+name = "support"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web.workspace = true
-reqwest.workspace = true
 sea-orm.workspace = true
-serde_json.workspace = true
-thiserror.workspace = true
-validify.workspace = true
+serde.workspace = true

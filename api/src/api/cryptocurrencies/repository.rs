@@ -1,7 +1,7 @@
 use error::{Error, Result};
 use sea_orm::{
-    prelude::Uuid, sea_query::Expr, ColumnTrait, DatabaseConnection, EntityTrait, JoinType,
-    PaginatorTrait, QueryFilter, QuerySelect, RelationTrait, SelectColumns,
+    prelude::Uuid, sea_query::{Expr, extension::postgres::PgExpr}, ColumnTrait, DatabaseConnection, EntityTrait, JoinType,
+    PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, SelectColumns,
 };
 use std::sync::Arc;
 use store::{
@@ -10,7 +10,7 @@ use store::{
     objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories, Repository},
 };
 
-use super::contract::DbRepositoryContract;
+use super::{contract::DbRepositoryContract, data::GetCryptoCurrenciesQuery};
 
 pub struct PgRepository {
     conn: Arc<DatabaseConnection>,
@@ -31,8 +31,11 @@ impl DbRepositoryContract for PgRepository {
             .await
             .map_err(Error::from)
     }
-    async fn get_cryptocurrencies(&self) -> Result<Vec<CryptoCurrencyView>> {
-        github_projects::Entity::find()
+    async fn get_cryptocurrencies(
+        &self,
+        params: GetCryptoCurrenciesQuery,
+    ) -> Result<Vec<CryptoCurrencyView>> {
+        let mut query = github_projects::Entity::find()
             .inner_join(cryptocurrencies::Entity)
             .left_join(github_repositories::Entity)
             .join_rev(
@@ -57,7 +60,17 @@ impl DbRepositoryContract for PgRepository {
                 "array_agg(distinct $1) as repositories",
                 github_repositories::Column::RepositoryName.into_expr(),
             ))
-            .column_as(issues::Column::Id.count(), "issues")
+            .column_as(issues::Column::Id.count(), "issues");
+
+        if let Some(search) = params.search {
+            query = query.filter(cryptocurrencies::Column::Name.into_expr().ilike(format!("%{}%", search)));
+        }
+
+        let order_by = params.order_by.unwrap_or("issues".to_owned());
+        let order = params.order.unwrap_or(support::order::Order::Desc);
+
+        query
+            .order_by(Expr::cust(order_by), order.into())
             .into_model::<CryptoCurrencyView>()
             .all(self.conn.as_ref())
             .await

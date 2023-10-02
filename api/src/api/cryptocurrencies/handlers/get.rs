@@ -1,7 +1,13 @@
-use actix_web::{web::Data, HttpResponse};
+use actix_web::{
+    web::{Data, Query},
+    HttpResponse,
+};
 use error::Result;
+use validify::Validate;
 
-use crate::api::cryptocurrencies::contract::CryptocurrenciesContract;
+use crate::api::cryptocurrencies::{
+    contract::CryptocurrenciesContract, data::GetCryptoCurrenciesQueryPayload,
+};
 
 #[utoipa::path(
     get,
@@ -16,7 +22,14 @@ use crate::api::cryptocurrencies::contract::CryptocurrenciesContract;
 )]
 pub async fn get_cryptocurrencies<S: CryptocurrenciesContract>(
     service: Data<S>,
+    query: Query<GetCryptoCurrenciesQueryPayload>,
 ) -> Result<HttpResponse> {
-    let value = service.get_cryptocurrencies().await?;
+    query.validate()?;
+    let query = query.into_inner().into();
+
+    let value = service
+        .get_cryptocurrencies(query)
+        .await?;
+
     Ok(HttpResponse::Ok().json(value))
 }

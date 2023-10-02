@@ -26,6 +26,9 @@ pub enum Error {
 
     #[error("Rate limit exceeded")]
     RateLimitExceeded,
+
+    #[error("Validation error: {0}")]
+    Validation(#[from] validify::ValidationErrors)
 }
 
 impl Error {
