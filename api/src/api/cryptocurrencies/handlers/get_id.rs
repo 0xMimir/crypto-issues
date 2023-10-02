@@ -7,6 +7,20 @@ use sea_orm::prelude::Uuid;
 
 use crate::api::cryptocurrencies::contract::CryptocurrenciesContract;
 
+#[utoipa::path(
+    get,
+    path = "/api/{version}/crypto/{id}",
+    params(
+        ("id", description = "Crypto id")
+    ),
+    responses(
+        (
+            status = 200,
+            description = "Crypto currency data with all full data for repositories",
+            body = [Model]
+        )
+    )
+)]
 pub async fn get_cryptocurrency_by_id<S: CryptocurrenciesContract>(
     path: Path<(String, Uuid)>,
     service: Data<S>,

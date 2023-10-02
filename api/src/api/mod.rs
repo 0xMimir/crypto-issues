@@ -4,6 +4,7 @@ use actix_web::{dev::Server, web::ServiceConfig, App, HttpServer};
 use sea_orm::DatabaseConnection;
 
 mod cryptocurrencies;
+mod openapi;
 
 pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
     let workers = match config::get_default("IS_DEV", "false").as_str() == "true" {
@@ -21,5 +22,6 @@ pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
 }
 
 fn configure_routes(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
+    openapi::OpenApiDocsFactory::configure_routes(config);
     cryptocurrencies::setup(conn, config);
 }

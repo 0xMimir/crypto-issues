@@ -6,6 +6,7 @@ use sea_orm::DatabaseConnection;
 use self::{domain::Cryptocurrencies, handlers::*, repository::PgRepository};
 
 mod contract;
+pub(super) mod docs;
 mod domain;
 mod handlers;
 mod repository;

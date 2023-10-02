@@ -13,10 +13,12 @@ diesel setup
 diesel migration run
 ```
 
-First seed the database with
+First seed the database with:
 ```sh
 cargo run --bin init
 ```
+
+This should take about 1-2 hours
 
 Then run api and cron with:
 ```sh
@@ -25,5 +27,5 @@ cargo run --bin api
 
 To generate store run: 
 ```sh
-sea generate entity --lib -o libs/store/src
+sea generate entity -o libs/store/src/migrations --model-extra-derives Serialize
 ```
