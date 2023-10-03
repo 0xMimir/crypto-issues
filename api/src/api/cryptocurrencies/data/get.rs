@@ -8,4 +8,6 @@ pub struct GetCryptoCurrenciesQuery {
     #[modify(trim)]
     pub order_by: Option<String>,
     pub order: Option<Order>,
+    pub page: Option<u64>,
+    pub per_page: Option<u64>,
 }

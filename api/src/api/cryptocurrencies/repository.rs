@@ -1,7 +1,9 @@
 use error::{Error, Result};
 use sea_orm::{
-    prelude::Uuid, sea_query::{Expr, extension::postgres::PgExpr}, ColumnTrait, DatabaseConnection, EntityTrait, JoinType,
-    PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, RelationTrait, SelectColumns,
+    prelude::Uuid,
+    sea_query::{extension::postgres::PgExpr, Expr},
+    ColumnTrait, DatabaseConnection, EntityTrait, JoinType, PaginatorTrait, QueryFilter,
+    QueryOrder, QuerySelect, RelationTrait, SelectColumns,
 };
 use std::sync::Arc;
 use store::{
@@ -9,6 +11,7 @@ use store::{
     issues::{self, Model as Issues},
     objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories, Repository},
 };
+use support::pagination::Pagination;
 
 use super::{contract::DbRepositoryContract, data::GetCryptoCurrenciesQuery};
 
@@ -34,7 +37,7 @@ impl DbRepositoryContract for PgRepository {
     async fn get_cryptocurrencies(
         &self,
         params: GetCryptoCurrenciesQuery,
-    ) -> Result<Vec<CryptoCurrencyView>> {
+    ) -> Result<Pagination<CryptoCurrencyView>> {
         let mut query = github_projects::Entity::find()
             .inner_join(cryptocurrencies::Entity)
             .left_join(github_repositories::Entity)
@@ -63,18 +66,34 @@ impl DbRepositoryContract for PgRepository {
             .column_as(issues::Column::Id.count(), "issues");
 
         if let Some(search) = params.search {
-            query = query.filter(cryptocurrencies::Column::Name.into_expr().ilike(format!("%{}%", search)));
+            query = query.filter(
+                cryptocurrencies::Column::Name
+                    .into_expr()
+                    .ilike(format!("%{}%", search)),
+            );
         }
 
         let order_by = params.order_by.unwrap_or("issues".to_owned());
         let order = params.order.unwrap_or(support::order::Order::Desc);
+        let per_page = params.per_page.unwrap_or(50);
+        let page = params.page.unwrap_or_default();
 
-        query
+        let query = query
             .order_by(Expr::cust(order_by), order.into())
             .into_model::<CryptoCurrencyView>()
-            .all(self.conn.as_ref())
-            .await
-            .map_err(Error::from)
+            .paginate(self.conn.as_ref(), per_page);
+
+        let pagination = query.num_items_and_pages().await?;
+        let data = query.fetch_page(page).await?;
+
+        Ok(Pagination {
+            page,
+            per_page,
+            order_by: vec![],
+            data,
+            total_items: pagination.number_of_items,
+            last_page: pagination.number_of_pages,
+        })
     }
 
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories> {

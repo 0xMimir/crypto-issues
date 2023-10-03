@@ -4,6 +4,7 @@ use store::{
     issues::Model as Issues,
     objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories},
 };
+use support::pagination::Pagination;
 
 use super::data::GetCryptoCurrenciesQuery;
 
@@ -11,12 +12,12 @@ use super::data::GetCryptoCurrenciesQuery;
 pub trait DbRepositoryContract {
     async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issues>>;
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories>;
-    async fn get_cryptocurrencies(&self, query: GetCryptoCurrenciesQuery) -> Result<Vec<CryptoCurrencyView>>;
+    async fn get_cryptocurrencies(&self, query: GetCryptoCurrenciesQuery) -> Result<Pagination<CryptoCurrencyView>>;
 }
 
 #[async_trait]
 pub trait CryptocurrenciesContract {
     async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issues>>;
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories>;
-    async fn get_cryptocurrencies(&self, query: GetCryptoCurrenciesQuery) -> Result<Vec<CryptoCurrencyView>>;
+    async fn get_cryptocurrencies(&self, query: GetCryptoCurrenciesQuery) -> Result<Pagination<CryptoCurrencyView>>;
 }
