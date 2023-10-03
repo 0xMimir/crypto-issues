@@ -4,3 +4,4 @@
 .env
 /.vscode
 tarpaulin-report.html
+codecov
