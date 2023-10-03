@@ -19,23 +19,27 @@ jobs:
           POSTGRES_DB: crypto-issues
         ports:
           - 5432:5432
-          
-    container:
-      image: xd009642/tarpaulin:develop-nightly
-      options: --security-opt seccomp=unconfined
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Generate code coverage
-        env: 
-          DATABASE_URL: postgres://postgres:password@localhost:5432/crypto-issues
-        run: |
-          cargo tarpaulin --out xml
-
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v2
+      - uses: actions/checkout@v3
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          fail_ci_if_error:     true
+          toolchain: nightly
+          override: true
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgres://postgres:password@localhost:5432/crypto-issues
+        run: cargo tarpaulin --out xml --skip-clean --fail-immediately
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
