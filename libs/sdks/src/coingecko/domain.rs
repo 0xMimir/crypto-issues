@@ -1,4 +1,4 @@
-use crate::coingecko::data::CryptoInfoResponse;
+use crate::coingecko::data::{CryptoInfoResponse, SimpleError};
 
 use super::{
     data::{CryptoInfo, ErrorResponse},
@@ -28,8 +28,12 @@ impl CoinGecko {
             Err(error) => error,
         };
 
-        match serde_json::from_str::<ErrorResponse>(&response) {
-            Ok(error) => Err(error.into()),
+        if let Ok(error) = serde_json::from_str::<ErrorResponse>(&response) {
+            return Err(error.into());
+        }
+
+        match serde_json::from_str::<SimpleError>(&response) {
+            Ok(error) => return Err(error.into()),
             Err(_) => Err(error.into()),
         }
     }
@@ -39,7 +43,11 @@ impl CoinGecko {
 impl CoinGeckoContract for CoinGecko {
     async fn get_info(&self, id: &str) -> Result<CryptoInfo> {
         let url = format!("https://api.coingecko.com/api/v3/coins/{}?localization=false&tickers=false&market_data=false&community_data=false&sparkline=false", id);
-        let response = self.get::<_, CryptoInfoResponse>(url).await?;
+        let response = self
+            .get::<_, CryptoInfoResponse>(url)
+            .await
+            .map_err(|e| e.add_cause(id))?;
+
         Ok(response.into())
     }
 

@@ -3,3 +3,4 @@
 *.profraw
 .env
 /.vscode
+tarpaulin-report.html

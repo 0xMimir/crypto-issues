@@ -6,6 +6,7 @@ pub struct SimpleCoin {
     pub name: String,
 }
 
+#[derive(Debug)]
 pub struct CryptoInfo {
     pub github: Option<String>,
     pub gitlab: Option<String>,
@@ -69,6 +70,11 @@ pub(crate) struct ErrorResponse {
 }
 
 #[derive(Deserialize)]
+pub(crate) struct SimpleError{
+    pub error: String
+}
+
+#[derive(Deserialize)]
 pub(crate) struct ErrorStatus {
     pub error_code: u16,
     pub error_message: String,
@@ -80,5 +86,15 @@ impl From<ErrorResponse> for Error {
             429 => Error::RateLimitExceeded,
             _ => Error::InternalServer(value.status.error_message),
         }
+    }
+}
+
+impl From<SimpleError> for Error{
+    fn from(value: SimpleError) -> Self {
+        if value.error == "coin not found"{
+            return Error::NotFound;
+        }
+
+        Self::InternalServer(value.error)
     }
 }
