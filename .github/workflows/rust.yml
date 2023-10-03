@@ -19,8 +19,10 @@ jobs:
           POSTGRES_DB: crypto-issues
         ports:
           - 5432:5432
+          
     container:
       image: xd009642/tarpaulin:develop-nightly
+      options: --security-opt seccomp=unconfined
 
     steps:
       - name: Checkout repository
