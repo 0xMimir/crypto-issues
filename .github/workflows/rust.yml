@@ -1,0 +1,38 @@
+name: Rust
+
+on:
+  push:
+    branches: ["master"]
+    
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin
+
+      - name: Run tests
+        run: |
+          cd rust-api
+          cargo tarpaulin --out xml --skip-clean --fail-immediately
+
+      - name: Upload to codecov
+        run: |
+          curl -Os https://cli.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov do-upload -F rust-api -t ${{secrets.CODECOV_TOKEN}}
