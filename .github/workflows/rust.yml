@@ -28,11 +28,10 @@ jobs:
 
       - name: Run tests
         run: |
-          cd rust-api
           cargo tarpaulin --out xml --skip-clean --fail-immediately
 
       - name: Upload to codecov
         run: |
           curl -Os https://cli.codecov.io/latest/linux/codecov
           chmod +x codecov
-          ./codecov do-upload -F rust-api -t ${{secrets.CODECOV_TOKEN}}
+          ./codecov -t ${{secrets.CODECOV_TOKEN}}
