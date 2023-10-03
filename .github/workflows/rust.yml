@@ -11,27 +11,29 @@ env:
 jobs:
   api-tests:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: crypto-issues
+        ports:
+          - 5432:5432
+    container:
+      image: xd009642/tarpaulin:develop-nightly
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Install latest nightly
-        uses: actions-rs/toolchain@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate code coverage
+        env: 
+          DATABASE_URL: postgres://postgres:password@localhost:5432/crypto-issues
+        run: |
+          cargo tarpaulin --out xml
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v2
         with:
-          toolchain: nightly
-          override: true
-          components: rustfmt, clippy
-
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Install tarpaulin
-        run: cargo install cargo-tarpaulin
-
-      - name: Run tests
-        run: |
-          cargo tarpaulin --out xml --skip-clean --fail-immediately
-
-      - name: Upload to codecov
-        run: |
-          curl -Os https://cli.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov do-upload -t ${{secrets.CODECOV_TOKEN}} -f cobertura.xml -C ${{ github.sha }}
+          token: ${{secrets.CODECOV_TOKEN}}
+          fail_ci_if_error:     true
