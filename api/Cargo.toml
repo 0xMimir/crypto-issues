@@ -24,6 +24,9 @@ validify.workspace = true
 serde.workspace = true
 support = { version = "0.1.0", path = "../libs/support" }
 
+[dev-dependencies]
+reqwest.workspace = true
+
 [[bin]]
 path = "src/main.rs"
 name = "api"

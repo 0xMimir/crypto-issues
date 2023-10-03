@@ -4,6 +4,7 @@ use sea_orm::Database;
 use std::sync::Arc;
 
 #[tokio::main]
+#[cfg(not(tarpaulin_include))]
 async fn main() {
     env_logger::builder()
         .filter_level(log::LevelFilter::Warn) // Set to warn so it doesn't print sea orm queries

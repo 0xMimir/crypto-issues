@@ -1,14 +1,17 @@
+use super::kenobi::__path_hello_there;
 use actix_web::{
     web::{self, resource, ServiceConfig},
     HttpResponse,
 };
 use utoipa::{openapi::OpenApi, OpenApi as Trait};
 
+#[derive(Trait)]
+#[openapi(paths(hello_there))]
 pub struct OpenApiDocsFactory;
 
 impl OpenApiDocsFactory {
     fn generate() -> ApiDocsState {
-        let mut openapi = OpenApi::default();
+        let mut openapi = Self::openapi();
 
         let docs = [super::cryptocurrencies::docs::CryptocurrenciesDocs::openapi()];
 
