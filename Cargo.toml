@@ -1,5 +1,5 @@
 [workspace]
-members = ["api", "libs/*"]
+members = ["api", "libs/*", "tests"]
 
 [workspace.dependencies]
 sea-orm = { version = "0.12.3", features = [
@@ -26,3 +26,5 @@ error.path = "libs/error"
 sdks.path = "libs/sdks"
 store.path = "libs/store"
 config.path = "libs/config"
+api.path = "api"
+support.path = "libs/support"

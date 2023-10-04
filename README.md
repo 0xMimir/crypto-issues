@@ -1,5 +1,7 @@
 # Crypto Issues
 
+[![codecov](https://codecov.io/gh/0xMimir/crypto-issues/graph/badge.svg?token=FZbBRHxsZ9)](https://codecov.io/gh/0xMimir/crypto-issues)
+
 Scan crypto currency repositories for open issues.
 
 To run locally first setup postgres database with

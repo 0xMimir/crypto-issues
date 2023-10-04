@@ -1,5 +1,4 @@
 use std::{sync::Arc, time::Duration};
-
 use error::Result;
 use reqwest::get;
 use sea_orm::Database;
