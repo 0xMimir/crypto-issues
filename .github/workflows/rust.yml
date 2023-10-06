@@ -34,6 +34,12 @@ jobs:
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin
 
+      - name: Install diesel
+        run: cargo install diesel_cli --no-default-features -F postgres
+
+      - name: Run migrations
+        run: diesel setup --database-url postgres://postgres:password@localhost:5432/crypto-issues
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:password@localhost:5432/crypto-issues
