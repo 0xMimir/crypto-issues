@@ -7,6 +7,10 @@ extern crate async_trait;
 #[macro_use]
 extern crate serde;
 
+#[cfg(test)]
+#[macro_use]
+extern crate adtest;
+
 mod api;
 pub mod jobs;
 

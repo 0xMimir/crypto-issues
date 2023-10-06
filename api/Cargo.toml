@@ -25,6 +25,7 @@ serde.workspace = true
 support.workspace = true
 
 [dev-dependencies]
+adtest.workspace = true
 reqwest.workspace = true
 
 [[bin]]
