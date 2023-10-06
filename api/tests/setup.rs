@@ -1,7 +1,7 @@
-use std::{sync::Arc, time::Duration};
 use error::Result;
 use reqwest::get;
 use sea_orm::Database;
+use std::{sync::Arc, time::Duration};
 use tokio::time::sleep;
 
 #[tokio::test]
@@ -24,7 +24,7 @@ async fn test_route_setup() -> Result<()> {
         .await?
         .text()
         .await?;
-    
+
     assert_eq!(response, "General Kenobi");
     handle.abort();
 

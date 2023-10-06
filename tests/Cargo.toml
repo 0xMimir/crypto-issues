@@ -6,8 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+adtest.workspace = true
 api.workspace = true
 config.workspace = true
+error.workspace = true
 reqwest.workspace = true
 sea-orm.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+store.workspace = true
+support.workspace = true
 tokio.workspace = true
+uuid.workspace = true

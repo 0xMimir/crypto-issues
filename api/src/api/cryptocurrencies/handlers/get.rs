@@ -27,9 +27,7 @@ pub async fn get_cryptocurrencies<S: CryptocurrenciesContract>(
     query.validate()?;
     let query = query.into_inner().into();
 
-    let value = service
-        .get_cryptocurrencies(query)
-        .await?;
+    let value = service.get_cryptocurrencies(query).await?;
 
     Ok(HttpResponse::Ok().json(value))
 }

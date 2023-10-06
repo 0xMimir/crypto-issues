@@ -1,4 +1,4 @@
-use error::{Result, Error};
+use error::{Error, Result};
 use sdks::github::{Github, GithubContract};
 
 #[tokio::test]
@@ -31,7 +31,10 @@ async fn test_error_handling() -> Result<()> {
     assert!(matches!(error, Error::Unauthorized));
 
     let github = Github::new();
-    let error = github.get_repos("github-that-does-not-exist", 1).await.unwrap_err();
+    let error = github
+        .get_repos("github-that-does-not-exist", 1)
+        .await
+        .unwrap_err();
     assert!(matches!(error, Error::NotFoundWithCause(_)));
 
     Ok(())

@@ -5,11 +5,11 @@ pub enum Order {
     Desc,
 }
 
-impl From<Order> for sea_orm::Order{
+impl From<Order> for sea_orm::Order {
     fn from(value: Order) -> Self {
-        match value{
+        match value {
             Order::Asc => Self::Asc,
-            Order::Desc => Self::Desc
+            Order::Desc => Self::Desc,
         }
     }
 }

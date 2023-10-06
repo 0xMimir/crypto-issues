@@ -31,7 +31,7 @@ pub enum Error {
     Validation(#[from] validify::ValidationErrors),
 
     #[error("Unauthorized")]
-    Unauthorized
+    Unauthorized,
 }
 
 impl Error {

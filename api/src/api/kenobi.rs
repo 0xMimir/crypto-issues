@@ -8,7 +8,7 @@ use actix_web::{get, HttpResponse};
 #[get("/hello-there")]
 ///
 /// Route to know that api has started up
-/// 
+///
 pub async fn hello_there() -> HttpResponse {
     HttpResponse::Ok().body("General Kenobi")
 }

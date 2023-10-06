@@ -70,8 +70,8 @@ pub(crate) struct ErrorResponse {
 }
 
 #[derive(Deserialize)]
-pub(crate) struct SimpleError{
-    pub error: String
+pub(crate) struct SimpleError {
+    pub error: String,
 }
 
 #[derive(Deserialize)]
@@ -89,9 +89,9 @@ impl From<ErrorResponse> for Error {
     }
 }
 
-impl From<SimpleError> for Error{
+impl From<SimpleError> for Error {
     fn from(value: SimpleError) -> Self {
-        if value.error == "coin not found"{
+        if value.error == "coin not found" {
             return Error::NotFound;
         }
 

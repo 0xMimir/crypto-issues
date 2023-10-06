@@ -1,6 +1,6 @@
 create table issues(
     id uuid primary key default uuid_generate_v4() not null,
-    repository uuid references github_repositories(id) not null,
+    repository uuid not null references github_repositories(id) on delete cascade,
     issue bigint not null,
     title text not null,
     description text,

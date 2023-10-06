@@ -28,7 +28,7 @@ impl From<ErrorResponse> for Error {
             return Error::NotFound;
         }
 
-        if value.message == "Bad credentials"{
+        if value.message == "Bad credentials" {
             return Error::Unauthorized;
         }
 
