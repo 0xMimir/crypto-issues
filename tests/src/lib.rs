@@ -1,7 +1,3 @@
-#[allow(unused)]
-#[macro_use]
-extern crate adtest;
-
 pub mod cryptocurrencies;
 pub mod request;
 
