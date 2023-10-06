@@ -2,7 +2,7 @@
 
 use sea_orm::entity::prelude::*;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "issues")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
@@ -24,7 +24,7 @@ pub enum Relation {
         from = "Column::Repository",
         to = "super::github_repositories::Column::Id",
         on_update = "NoAction",
-        on_delete = "NoAction"
+        on_delete = "Cascade"
     )]
     GithubRepositories,
 }
