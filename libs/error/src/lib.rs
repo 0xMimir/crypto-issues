@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 mod actix;
+pub use actix::ErrorResponse;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -32,6 +33,9 @@ pub enum Error {
 
     #[error("Unauthorized")]
     Unauthorized,
+
+    #[error("Error parsing uuid")]
+    Uuid(#[from] uuid::Error)
 }
 
 impl Error {

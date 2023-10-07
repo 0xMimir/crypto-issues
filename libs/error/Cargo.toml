@@ -7,8 +7,11 @@ edition = "2021"
 
 [dependencies]
 actix-web.workspace = true
+chrono.workspace = true
 reqwest.workspace = true
 sea-orm.workspace = true
+serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+uuid.workspace = true
 validify.workspace = true

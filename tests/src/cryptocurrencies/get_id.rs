@@ -1,5 +1,5 @@
 use crate::request::request;
-use error::Result;
+use error::{ErrorResponse, Result};
 use reqwest::Method;
 use sea_orm::{
     prelude::Uuid, sea_query::OnConflict, DatabaseConnection, EntityTrait, ModelTrait, Set,
@@ -20,6 +20,18 @@ pub async fn api_v1_crypto_id(sea_pool: &DatabaseConnection) {
             .unwrap();
 
     assert_eq!(response.repositories.len(), 1);
+
+    let response: ErrorResponse = request("/api/v1/crypto/not-a-uuid", Method::GET, ())
+        .await
+        .unwrap();
+
+    assert_eq!(response.status, 500);
+
+    let response: ErrorResponse = request("/api/v1/crypto/aac5a965-e14a-472b-a0e4-66bf6f65d39f", Method::GET, ())
+        .await
+        .unwrap();
+
+    assert_eq!(response.status, 404);
 
     github.delete(sea_pool).await.unwrap();
     crypto.delete(sea_pool).await.unwrap();
