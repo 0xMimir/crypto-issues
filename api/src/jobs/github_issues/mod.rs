@@ -9,7 +9,17 @@ use infrastructure::{PgRepository, PgService};
 use sdks::github::Github;
 use sea_orm::DatabaseConnection;
 
+#[cfg(test)]
+mod test;
+
 pub fn setup(sea_pool: Arc<DatabaseConnection>) -> tokio::task::JoinHandle<()> {
+    let cron = setup_github_issues(sea_pool);
+    cron.spawn_cron()
+}
+
+fn setup_github_issues(
+    sea_pool: Arc<DatabaseConnection>,
+) -> GithubIssueCron<PgRepository, PgService, Github> {
     let repository = PgRepository::new(sea_pool.clone());
     let service = PgService::new(sea_pool);
 
@@ -20,6 +30,5 @@ pub fn setup(sea_pool: Arc<DatabaseConnection>) -> tokio::task::JoinHandle<()> {
         None => Github::default(),
     };
 
-    let cron = GithubIssueCron::new(repository, service, github);
-    cron.spawn_cron()
+    GithubIssueCron::new(repository, service, github)
 }

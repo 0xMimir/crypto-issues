@@ -6,23 +6,23 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sdks.workspace = true
-error.workspace = true
-store.workspace = true
 log.workspace = true
 tokio.workspace = true
 sea-orm.workspace = true
-config.workspace = true
 env_logger.workspace = true
-tokio-cron-scheduler.workspace = true
 async-trait.workspace = true
-actix.workspace = true
 actix-web.workspace = true
 utoipa.workspace = true
 serde_json.workspace = true
 validify.workspace = true
 serde.workspace = true
+
+# Workspace depenacies
+sdks.workspace = true
+error.workspace = true
+store.workspace = true
 support.workspace = true
+config.workspace = true
 
 [dev-dependencies]
 adtest.workspace = true

@@ -6,6 +6,7 @@ use sdks::{coingecko::CoinGecko, github::Github};
 use sea_orm::{Database, DatabaseConnection};
 
 #[tokio::main]
+#[cfg(not(tarpaulin_include))]
 async fn main() {
     env_logger::builder()
         .filter_level(log::LevelFilter::Warn)
@@ -20,6 +21,7 @@ async fn main() {
     repo_init(sea_pool).await;
 }
 
+#[cfg(not(tarpaulin_include))]
 async fn info_init(sea_pool: Arc<DatabaseConnection>) {
     let repository = api::jobs::info::infrastructure::PgRepository::new(sea_pool.clone());
     let service = api::jobs::info::infrastructure::PgService::new(sea_pool);
@@ -30,6 +32,7 @@ async fn info_init(sea_pool: Arc<DatabaseConnection>) {
     init.preform_init().await.unwrap();
 }
 
+#[cfg(not(tarpaulin_include))]
 async fn repo_init(sea_pool: Arc<DatabaseConnection>) {
     let repository =
         api::jobs::github_repositories::infrastructure::PgRepository::new(sea_pool.clone());

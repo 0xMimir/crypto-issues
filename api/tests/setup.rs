@@ -33,7 +33,7 @@ async fn test_route_setup() -> Result<()> {
 async fn test_job_setup() {
     let db_pool = create_db_pool().await;
     let jobs = api::setup_jobs(db_pool);
-
+    sleep(Duration::from_secs(5)).await;
     for job in jobs {
         assert!(!job.is_finished());
         job.abort();

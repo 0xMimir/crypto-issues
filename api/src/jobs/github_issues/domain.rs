@@ -41,7 +41,7 @@ impl<
     ///
     /// Get all github projects from db and call `handle_project` for every project
     ///
-    async fn cron_job(&self) -> Result<()> {
+    pub(super) async fn cron_job(&self) -> Result<()> {
         let projects = self.repository.get_projects().await?;
         for project in projects {
             if let Err(error) = self.handle_project(project).await {
