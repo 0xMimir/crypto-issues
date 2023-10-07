@@ -1,7 +1,7 @@
 use error::Result;
 use reqwest::get;
-use sea_orm::Database;
-use std::{sync::Arc, time::Duration};
+use std::time::Duration;
+use support::db_pool::create_db_pool;
 use tokio::time::sleep;
 
 #[tokio::test]
@@ -10,9 +10,7 @@ use tokio::time::sleep;
 /// be in env for api to start, not to function
 ///
 async fn test_route_setup() -> Result<()> {
-    let db_url = config::get("DATABASE_URL").unwrap();
-    let pool = Database::connect(db_url).await.unwrap();
-    let sea_pool = Arc::new(pool);
+    let sea_pool = create_db_pool().await;
 
     let routes = api::create_api(sea_pool);
 
@@ -29,4 +27,15 @@ async fn test_route_setup() -> Result<()> {
     handle.abort();
 
     Ok(())
+}
+
+#[tokio::test]
+async fn test_job_setup() {
+    let db_pool = create_db_pool().await;
+    let jobs = api::setup_jobs(db_pool);
+
+    for job in jobs {
+        assert!(!job.is_finished());
+        job.abort();
+    }
 }
