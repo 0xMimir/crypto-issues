@@ -1,11 +1,14 @@
 version: '3.1'
 
 services:
-  postgres:
-    image: postgres
-    restart: always
+  crypto-issues:
+    build: 
+      dockerfile: Dockerfile
+      context: backend
+    restart: no
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: crypto-issues
+      DATABASE_URL: postgres://postgres:password@database:5666/crypto-issues
     ports:
-      - 5666:5432
+      - 1111:1111
+    extra_hosts:
+      - "database:host-gateway"

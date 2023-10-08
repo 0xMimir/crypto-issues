@@ -1,0 +1,8 @@
+/target
+/Cargo.lock
+*.profraw
+.env
+/.vscode
+tarpaulin-report.*
+codecov
+trampolin.sh

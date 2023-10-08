@@ -31,6 +31,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
+      - name: Change directory
+        run: cd backend
+
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin
 
@@ -49,3 +52,5 @@ jobs:
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          flags: backend
+          

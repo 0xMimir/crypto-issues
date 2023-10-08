@@ -4,6 +4,10 @@
 
 Scan crypto currency repositories for open issues.
 
+## Backend
+
+To run backend run following steps from `backend` directory
+
 To run locally first setup postgres database with
 ```sh
 docker compose up -d
@@ -30,4 +34,9 @@ cargo run --bin api
 To generate store run: 
 ```sh
 sea generate entity -o libs/store/src/migrations --model-extra-derives Serialize,Deserialize --model-extra-attributes 'serde(rename_all = "camelCase")'
+```
+
+To build docker image run:
+```sh
+docker build -t crypto-issues .
 ```
