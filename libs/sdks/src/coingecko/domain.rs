@@ -33,7 +33,7 @@ impl CoinGecko {
         }
 
         match serde_json::from_str::<SimpleError>(&response) {
-            Ok(error) => return Err(error.into()),
+            Ok(error) => Err(error.into()),
             Err(_) => Err(error.into()),
         }
     }

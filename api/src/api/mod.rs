@@ -19,7 +19,7 @@ pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
 
     HttpServer::new(move || App::new().configure(|config| configure_routes(conn.clone(), config)))
         .workers(workers)
-        .bind(("localhost", 1111))
+        .bind(("0.0.0.0", 1111))
         .expect("Unable to start sever")
         .run()
 }

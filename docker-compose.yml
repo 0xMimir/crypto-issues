@@ -8,4 +8,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: crypto-issues
     ports:
-      - 5432:5432
+      - 5666:5432
+
+  crypto-issues:
+    build: .
+    restart: no
+    environment:
+      DATABASE_URL: postgres://postgres:password@database:5666/crypto-issues
+    ports:
+      - 1111:1111
+    extra_hosts:
+      - "database:host-gateway"
