@@ -1,4 +1,5 @@
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Pagination<T> {
     pub page: u64,
     pub per_page: u64,

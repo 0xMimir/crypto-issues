@@ -7,7 +7,8 @@ use std::sync::Arc;
 #[cfg(not(tarpaulin_include))]
 async fn main() {
     env_logger::builder()
-        .filter_level(log::LevelFilter::Info) // Set to warn so it doesn't print sea orm queries
+        .filter_level(log::LevelFilter::Info)
+        .filter_module("sqlx::query", log::LevelFilter::Off) // Set to warn so it doesn't print sea orm queries
         .init();
 
     dotenv_init();

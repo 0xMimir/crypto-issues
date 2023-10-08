@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use actix_cors::Cors;
 use actix_web::{dev::Server, web::ServiceConfig, App, HttpServer};
 use sea_orm::DatabaseConnection;
 
@@ -17,11 +18,15 @@ pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
             .unwrap_or(8),
     };
 
-    HttpServer::new(move || App::new().configure(|config| configure_routes(conn.clone(), config)))
-        .workers(workers)
-        .bind(("0.0.0.0", 1111))
-        .expect("Unable to start sever")
-        .run()
+    HttpServer::new(move || {
+        App::new()
+            .wrap(setup_cors())
+            .configure(|config| configure_routes(conn.clone(), config))
+    })
+    .workers(workers)
+    .bind(("0.0.0.0", 1111))
+    .expect("Unable to start sever")
+    .run()
 }
 
 fn configure_routes(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
@@ -29,4 +34,12 @@ fn configure_routes(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
     cryptocurrencies::setup(conn, config);
 
     config.service(hello_there);
+}
+
+fn setup_cors() -> Cors {
+    Cors::default()
+        .allowed_methods(vec!["GET", "POST", "PUT"])
+        .allowed_origin("http://localhost:8080")
+        .allow_any_origin()
+        .allow_any_header()
 }

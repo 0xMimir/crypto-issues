@@ -10,6 +10,7 @@ use sea_orm::{Database, DatabaseConnection};
 async fn main() {
     env_logger::builder()
         .filter_level(log::LevelFilter::Warn)
+        .filter_module("sqlx::query", log::LevelFilter::Off)
         .init();
 
     dotenv_init();

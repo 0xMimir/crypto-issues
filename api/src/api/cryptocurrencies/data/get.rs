@@ -2,6 +2,7 @@ use support::order::Order;
 use validify::Validify;
 
 #[derive(Validify, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GetCryptoCurrenciesQuery {
     #[modify(trim)]
     pub search: Option<String>,

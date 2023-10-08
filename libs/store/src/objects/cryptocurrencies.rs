@@ -1,6 +1,7 @@
 use sea_orm::{prelude::Uuid, FromQueryResult};
 
 #[derive(FromQueryResult, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CryptoCurrencyView {
     pub id: Uuid,
     pub name: String,

@@ -29,5 +29,5 @@ cargo run --bin api
 
 To generate store run: 
 ```sh
-sea generate entity -o libs/store/src/migrations --model-extra-derives Serialize
+sea generate entity -o libs/store/src/migrations --model-extra-derives Serialize,Deserialize --model-extra-attributes 'serde(rename_all = "camelCase")'
 ```

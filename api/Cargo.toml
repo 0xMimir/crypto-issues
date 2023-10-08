@@ -23,6 +23,7 @@ error.workspace = true
 store.workspace = true
 support.workspace = true
 config.workspace = true
+actix-cors.workspace = true
 
 [dev-dependencies]
 adtest.workspace = true
