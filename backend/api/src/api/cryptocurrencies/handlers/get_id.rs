@@ -4,7 +4,7 @@ use actix_web::{
 };
 use error::Result;
 
-use crate::api::cryptocurrencies::contract::CryptocurrenciesContract;
+use super::super::contract::CryptocurrenciesContract;
 
 #[utoipa::path(
     get,

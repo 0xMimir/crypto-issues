@@ -12,10 +12,13 @@ use store::{cryptocurrencies, github_projects, github_repositories, issues};
 pub async fn api_v1_repository_id_issues(sea_pool: &DatabaseConnection) {
     let (github, crypto) = setup(sea_pool).await.unwrap();
 
-    let _response: Vec<issues::Model> =
-        request(format!("/api/v1/repository/{}/issues", crypto.id), Method::GET, ())
-            .await
-            .unwrap();
+    let _response: Vec<issues::Model> = request(
+        format!("/api/v1/repository/{}/issues", crypto.id),
+        Method::GET,
+        (),
+    )
+    .await
+    .unwrap();
 
     github.delete(sea_pool).await.unwrap();
     crypto.delete(sea_pool).await.unwrap();

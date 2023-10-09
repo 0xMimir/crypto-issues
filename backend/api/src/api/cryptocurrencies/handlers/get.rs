@@ -5,9 +5,7 @@ use actix_web::{
 use error::Result;
 use validify::Validate;
 
-use crate::api::cryptocurrencies::{
-    contract::CryptocurrenciesContract, data::GetCryptoCurrenciesQueryPayload,
-};
+use super::super::{contract::CryptocurrenciesContract, data::GetCryptoCurrenciesQueryPayload};
 
 #[utoipa::path(
     get,

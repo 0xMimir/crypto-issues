@@ -4,7 +4,7 @@ use sea_orm::{Database, DatabaseConnection};
 
 ///
 /// Create sea orm db pool
-/// 
+///
 pub async fn create_db_pool() -> Arc<DatabaseConnection> {
     let db_url = config::get("DATABASE_URL").expect("DATABASE_URL not set in env");
     let pool = Database::connect(db_url)

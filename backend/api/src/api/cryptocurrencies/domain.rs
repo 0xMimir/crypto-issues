@@ -4,10 +4,7 @@ use super::{
 };
 use error::Result;
 use sea_orm::prelude::Uuid;
-use store::{
-    issues::Model as Issue,
-    objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories},
-};
+use store::objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories};
 use support::pagination::Pagination;
 
 pub struct Cryptocurrencies<A: DbRepositoryContract> {
@@ -24,11 +21,5 @@ impl<A: DbRepositoryContract + Send + Sync> CryptocurrenciesContract for Cryptoc
     }
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories> {
         self.repository.get_cryptocurrency(id).await
-    }
-
-    async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issue>> {
-        self.repository
-            .get_issues_for_repository(repository_id)
-            .await
     }
 }

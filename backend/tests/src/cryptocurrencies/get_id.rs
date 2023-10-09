@@ -27,9 +27,13 @@ pub async fn api_v1_crypto_id(sea_pool: &DatabaseConnection) {
 
     assert_eq!(response.status, 500);
 
-    let response: ErrorResponse = request("/api/v1/crypto/aac5a965-e14a-472b-a0e4-66bf6f65d39f", Method::GET, ())
-        .await
-        .unwrap();
+    let response: ErrorResponse = request(
+        "/api/v1/crypto/aac5a965-e14a-472b-a0e4-66bf6f65d39f",
+        Method::GET,
+        (),
+    )
+    .await
+    .unwrap();
 
     assert_eq!(response.status, 404);
 

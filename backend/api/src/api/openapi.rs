@@ -13,7 +13,10 @@ impl OpenApiDocsFactory {
     fn generate() -> ApiDocsState {
         let mut openapi = Self::openapi();
 
-        let docs = [super::cryptocurrencies::docs::CryptocurrenciesDocs::openapi()];
+        let docs = [
+            super::cryptocurrencies::docs::CryptocurrenciesDocs::openapi(),
+            super::repository::docs::RepositoryDocs::openapi(),
+        ];
 
         for doc in docs {
             openapi.merge(doc);

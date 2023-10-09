@@ -35,7 +35,7 @@ pub enum Error {
     Unauthorized,
 
     #[error("Error parsing uuid")]
-    Uuid(#[from] uuid::Error)
+    Uuid(#[from] uuid::Error),
 }
 
 impl Error {

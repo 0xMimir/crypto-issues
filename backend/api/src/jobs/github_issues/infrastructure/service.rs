@@ -25,7 +25,7 @@ impl DbServiceContract for PgService {
             .into_iter()
             .map(|issue| ActiveModel {
                 repository: Set(repository_id),
-                issue: Set(issue.id),
+                issue: Set(issue.number),
                 title: Set(issue.title),
                 description: Set(issue.description),
                 created_at: Set(issue.created_at),

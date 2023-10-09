@@ -20,7 +20,7 @@ pub fn setup(sea_pool: Arc<DatabaseConnection>) -> tokio::task::JoinHandle<()> {
 
 ///
 /// Create GithubRepositoriesCron with default implementations
-/// 
+///
 fn create_gr(
     sea_pool: Arc<DatabaseConnection>,
 ) -> GithubRepositoriesCron<PgRepository, PgService, Github> {

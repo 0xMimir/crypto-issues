@@ -3,7 +3,7 @@ use std::sync::Arc;
 use actix_web::web::{self, resource, Data, ServiceConfig};
 use sea_orm::DatabaseConnection;
 
-use self::{domain::Cryptocurrencies, handlers::*, repository::PgRepository};
+use self::{domain::Repository, handlers::*, repository::PgRepository};
 
 mod contract;
 mod data;
@@ -13,19 +13,19 @@ mod handlers;
 mod repository;
 
 pub fn setup(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
-    let state = Cryptocurrencies {
+    let state = Repository {
         repository: PgRepository::new(conn),
     };
 
     config.app_data(Data::new(state));
 
     config.service(
-        resource("/api/{version}/crypto")
-            .route(web::get().to(get_cryptocurrencies::<Cryptocurrencies<PgRepository>>)),
+        resource("/api/{version}/repository/{id}")
+            .route(web::get().to(get_repository_by_id::<Repository<PgRepository>>)),
     );
 
     config.service(
-        resource("/api/{version}/crypto/{id}")
-            .route(web::get().to(get_cryptocurrency_by_id::<Cryptocurrencies<PgRepository>>)),
+        resource("/api/{version}/repository/{id}/issues")
+            .route(web::get().to(get_issues::<Repository<PgRepository>>)),
     );
 }

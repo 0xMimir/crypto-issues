@@ -7,8 +7,7 @@ use sea_orm::{
 };
 use std::sync::Arc;
 use store::{
-    cryptocurrencies, github_projects, github_repositories,
-    issues::{self, Model as Issues},
+    cryptocurrencies, github_projects, github_repositories, issues,
     objects::{CryptoCurrencyView, CryptoCurrencyWithRepositories, Repository},
 };
 use support::pagination::Pagination;
@@ -27,13 +26,6 @@ impl PgRepository {
 
 #[async_trait]
 impl DbRepositoryContract for PgRepository {
-    async fn get_issues_for_repository(&self, repository_id: Uuid) -> Result<Vec<Issues>> {
-        issues::Entity::find()
-            .filter(issues::Column::Repository.eq(repository_id))
-            .all(self.conn.as_ref())
-            .await
-            .map_err(Error::from)
-    }
     async fn get_cryptocurrencies(
         &self,
         params: GetCryptoCurrenciesQuery,

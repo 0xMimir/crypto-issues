@@ -38,7 +38,7 @@ impl From<ErrorResponse> for Error {
 
 #[derive(Deserialize)]
 pub struct GithubIssue {
-    pub id: i64,
+    pub number: i64,
     pub title: String,
     #[serde(rename = "body")]
     pub description: Option<String>,
