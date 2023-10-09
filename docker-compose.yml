@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  crypto-issues:
+  api:
     build: 
       dockerfile: Dockerfile
       context: backend
@@ -12,3 +12,17 @@ services:
       - 1111:1111
     extra_hosts:
       - "database:host-gateway"
+
+  frontend:
+    build: 
+      dockerfile: Dockerfile
+      context: frontend
+    restart: always
+    environment:
+      API_URL: http://api-url:1111
+    ports:
+      - 9000:80
+    extra_hosts:
+      - "api-url:host-gateway"
+
+  
