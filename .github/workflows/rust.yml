@@ -45,6 +45,7 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:password@localhost:5432/crypto-issues
+          GITHUB_KEY: ${{ secrets.GI_TOKEN }}
         run: |
           cd backend
           cargo tarpaulin --out xml --skip-clean --fail-immediately
