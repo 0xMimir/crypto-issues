@@ -5,6 +5,7 @@ use sea_orm::{
     prelude::Uuid, sea_query::OnConflict, DatabaseConnection, EntityTrait, ModelTrait, Set,
 };
 use store::{cryptocurrencies, github_projects, github_repositories, issues};
+use support::pagination::Pagination;
 
 ///
 /// Test function for /api/v1/repository/{id}/issues
@@ -12,7 +13,7 @@ use store::{cryptocurrencies, github_projects, github_repositories, issues};
 pub async fn api_v1_repository_id_issues(sea_pool: &DatabaseConnection) {
     let (github, crypto) = setup(sea_pool).await.unwrap();
 
-    let _response: Vec<issues::Model> = request(
+    let _response: Pagination<issues::Model> = request(
         format!("/api/v1/repository/{}/issues", crypto.id),
         Method::GET,
         (),
