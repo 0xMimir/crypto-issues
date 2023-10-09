@@ -9,6 +9,7 @@ import router from './router'
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Paginator from 'primevue/paginator';
+import Listbox from 'primevue/listbox';
 
 const app = createApp(App)
 const pinia =  createPinia();
@@ -16,6 +17,7 @@ const pinia =  createPinia();
 app.use(router)
 app.use(pinia)
 app.use(PrimeVue)
+
 app.component("Column", Column)
 app.component("DataTable", DataTable)
 app.component("Paginator", Paginator)

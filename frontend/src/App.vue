@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <header>Crypto Issues</header>
+  <header>
+    <RouterLink to="/" class="link">Crypto Issues</RouterLink>
+  </header>
   <br />
   <div class="wrapper">
     <RouterView />
@@ -13,7 +15,11 @@ header {
   padding: 0.5rem;
   font-size: xx-large;
 }
-
+.link,
+.link :visited {
+  color: inherit;
+  text-decoration: none;
+}
 .wrapper {
   width: 80%;
   margin: auto;
