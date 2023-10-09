@@ -25,6 +25,7 @@ uuid = { version = "1.4.1", features = ["v4"] }
 lazy_static = "1.4.0"
 serial_test = "2.0.0"
 actix-cors = "0.6.4"
+adtest = "0.1.0"
 
 error.path = "libs/error"
 sdks.path = "libs/sdks"
@@ -32,4 +33,3 @@ store.path = "libs/store"
 config.path = "libs/config"
 api.path = "api"
 support.path = "libs/support"
-adtest.git = "https://github.com/0xMimir/adtest.git"
