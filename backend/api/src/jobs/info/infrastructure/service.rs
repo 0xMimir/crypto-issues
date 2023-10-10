@@ -8,7 +8,7 @@ use std::sync::Arc;
 
 use super::super::contract::DbServiceContract;
 use store::{
-    cryptocurrencies::{ActiveModel, Entity},
+    cryptocurrencies::{ActiveModel, Entity, self},
     github_projects::{ActiveModel as CreateGithub, Entity as GithubEntity},
 };
 
@@ -82,5 +82,10 @@ impl DbServiceContract for PgService {
             .await?;
 
         Ok(model.id)
+    }
+
+    async fn delete_crypto(&self, id: Uuid) -> Result<()>{
+        cryptocurrencies::Entity::delete_by_id(id).exec(self.conn.as_ref()).await?;
+        Ok(())
     }
 }

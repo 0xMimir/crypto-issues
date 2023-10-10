@@ -67,6 +67,12 @@ impl<
                     warn!("Rate limit exceeded sleeping for minute");
                     sleep(Duration::from_secs(60)).await;
                     continue;
+                },
+                Err(Error::NotFoundWithCause(_)) | Err(Error::NotFound) => {
+                    if let Err(error) = self.service.delete_crypto(*id).await{
+                        error!("{}", error);
+                    }
+                    continue
                 }
                 Err(error) => return Err(error),
             };
