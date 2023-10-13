@@ -11,7 +11,7 @@ const repositoryId = useRoute().params.id as string;
 const repository = ref<RepositoryView | null>(null);
 const issues = ref<Issue[]>([]);
 const page = ref(0);
-const perPage = ref(100);
+const perPage = ref(50);
 const lastPage = ref(0);
 const store = useCryptocurrenciesStore();
 
@@ -23,7 +23,7 @@ function loadData() {
 }
 
 function changePage(pageState: { page: number }) {
-  page.value = pageState.page;
+  page.value = pageState.page + 1;
   loadData();
 }
 
@@ -32,6 +32,7 @@ loadData();
 store
   .getRepository(repositoryId)
   .then((response) => (repository.value = response));
+
 </script>
 <template>
   <div v-if="repository">
@@ -72,6 +73,7 @@ store
     <Paginator
       :rows="perPage"
       :totalRecords="lastPage"
+      :page="page"
       @page="changePage"
     ></Paginator>
   </div>

@@ -43,6 +43,9 @@ store.getCryptocurrency(cryptoId).then((response) => (crypto.value = response));
             </RouterLink>
           </template>
         </Column>
+        <Column field="language" header="Repository language"></Column>
+        <Column field="stargazersCount" header="Stars"></Column>
+        <Column field="forksCount" header="Forks"></Column>
         <Column field="github" header="Github">
           <template #body="slotProps">
             <a

@@ -10,5 +10,8 @@ export interface CryptoCurrencyWithRepositories{
 
 export interface Repository{
     id: string,
-    repositoryName: string
+    repositoryName: string,
+    language?: string,
+    stargazersCount: number,
+    forksCount: number
 }
