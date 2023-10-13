@@ -10,6 +10,9 @@ pub struct Model {
     pub id: Uuid,
     pub project: Uuid,
     pub repository_name: String,
+    pub language: Option<String>,
+    pub stargazers_count: i64,
+    pub forks_count: i64,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

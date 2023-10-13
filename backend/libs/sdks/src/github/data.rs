@@ -2,15 +2,12 @@ use chrono::NaiveDateTime;
 use error::Error;
 use serde::{de::Error as DeError, Deserialize, Deserializer};
 
-#[derive(Deserialize)]
-pub(super) struct GithubRepository {
+#[derive(Deserialize, Debug)]
+pub struct GithubRepository {
     pub name: String,
-}
-
-impl GithubRepository {
-    pub fn into(response: Vec<Self>) -> Vec<String> {
-        response.into_iter().map(|gr| gr.name).collect()
-    }
+    pub language: Option<String>,
+    pub stargazers_count: i64,
+    pub forks_count: i64
 }
 
 #[derive(Deserialize)]

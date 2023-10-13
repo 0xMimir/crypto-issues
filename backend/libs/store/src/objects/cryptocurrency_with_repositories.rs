@@ -17,4 +17,7 @@ pub struct CryptoCurrencyWithRepositories {
 pub struct Repository {
     pub id: Uuid,
     pub repository_name: String,
+    pub language: Option<String>,
+    pub stargazers_count: i64,
+    pub forks_count: i64,
 }

@@ -115,6 +115,9 @@ impl DbRepositoryContract for PgRepository {
             .columns([
                 github_repositories::Column::Id,
                 github_repositories::Column::RepositoryName,
+                github_repositories::Column::Language,
+                github_repositories::Column::StargazersCount,
+                github_repositories::Column::ForksCount,
             ])
             .into_model::<Repository>()
             .all(self.conn.as_ref())

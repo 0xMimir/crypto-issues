@@ -1,11 +1,26 @@
 use error::{Error, Result};
 use sdks::github::{Github, GithubContract};
 
+fn client() -> Github {
+    let key = config::get("GITHUB_KEY");
+
+    match key.ok() {
+        Some(api_key) => Github::new_with_auth(api_key),
+        None => Github::default(),
+    }
+}
+
 #[tokio::test]
 async fn test_repos() -> Result<()> {
-    let github = Github::default();
+    let github = client();
 
-    let mut repos = github.get_repos("bitcoin", 1).await?;
+    let mut repos = github
+        .get_repos("bitcoin", 1)
+        .await?
+        .into_iter()
+        .map(|repo| repo.name)
+        .collect::<Vec<_>>();
+    
     repos.sort();
     assert_eq!(repos, vec!["bips", "bitcoin", "libbase58", "libblkmaker"]);
 
@@ -14,7 +29,7 @@ async fn test_repos() -> Result<()> {
 
 #[tokio::test]
 async fn test_issues() -> Result<()> {
-    let github = Github::default();
+    let github = client();
 
     let issues = github.get_issues("bitcoin", "bitcoin", 1).await?;
 

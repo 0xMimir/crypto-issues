@@ -74,6 +74,7 @@ impl<
             self.service
                 .create_repository(github.id, repositories)
                 .await?;
+            
             page += 1;
         }
 
@@ -84,6 +85,8 @@ impl<
     /// Spawns tokio task, that waits for a day, then runs once a week
     ///
     pub fn spawn_cron(self) -> JoinHandle<()> {
+        info!("Spawning github repositories task");
+
         tokio::spawn(async move {
             let mut interval = interval_at(
                 (Instant::now() + Duration::from_secs(86_400)).into(),

@@ -60,11 +60,9 @@ impl Github {
 
 #[async_trait]
 impl GithubContract for Github {
-    async fn get_repos(&self, username: &str, page: u64) -> Result<Vec<String>> {
+    async fn get_repos(&self, username: &str, page: u64) -> Result<Vec<GithubRepository>> {
         let url = format!("https://api.github.com/users/{username}/repos?page={page}&per_page=100");
-        let response = self.get(url).await.map_err(|e| e.add_cause(username))?;
-
-        Ok(GithubRepository::into(response))
+        self.get(url).await.map_err(|e| e.add_cause(username))
     }
 
     async fn get_issues(
