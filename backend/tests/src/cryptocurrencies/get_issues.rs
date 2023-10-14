@@ -58,6 +58,8 @@ async fn setup(
     let github_repo = github_repositories::ActiveModel {
         project: Set(github.id),
         repository_name: Set("good-repo".to_owned()),
+        stargazers_count: Set(0),
+        forks_count: Set(0),
         ..Default::default()
     };
 
