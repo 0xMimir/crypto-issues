@@ -49,6 +49,8 @@ async fn test_setup() {
     let model = github_repositories::ActiveModel {
         project: Set(model.id),
         repository_name: Set("bitcoin".to_owned()),
+        stargazers_count: Set(0),
+        forks_count: Set(0),
         ..Default::default()
     };
 
