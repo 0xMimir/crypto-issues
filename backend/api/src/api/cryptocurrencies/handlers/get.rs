@@ -14,7 +14,7 @@ use super::super::{contract::CryptocurrenciesContract, data::GetCryptoCurrencies
         (
             status = 200,
             description = "List of crypto currencies with available repositories and total issues",
-            body = [CryptoCurrencyView]
+            body = PaginatedCryptoCurrencyView
         )
     )
 )]

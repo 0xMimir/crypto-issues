@@ -16,5 +16,9 @@ pub trait DbServiceContract {
     ///
     /// Create entries in `github_repositories` table
     ///
-    async fn create_repository(&self, project_id: Uuid, repositories: Vec<GithubRepository>) -> Result<()>;
+    async fn create_repository(
+        &self,
+        project_id: Uuid,
+        repositories: Vec<GithubRepository>,
+    ) -> Result<()>;
 }

@@ -1,6 +1,6 @@
 use sea_orm::{prelude::Uuid, FromQueryResult};
 
-#[derive(FromQueryResult, Deserialize, Serialize)]
+#[derive(FromQueryResult, Deserialize, Serialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct RepositoryView {
     pub id: Uuid,

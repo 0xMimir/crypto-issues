@@ -20,7 +20,7 @@ async fn test_repos() -> Result<()> {
         .into_iter()
         .map(|repo| repo.name)
         .collect::<Vec<_>>();
-    
+
     repos.sort();
     assert_eq!(repos, vec!["bips", "bitcoin", "libbase58", "libblkmaker"]);
 

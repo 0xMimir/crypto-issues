@@ -1,6 +1,6 @@
 use error::Result;
 use sea_orm::prelude::Uuid;
-use store::{issues::Model as Issues, objects::RepositoryView};
+use store::objects::{GithubIssue, RepositoryView};
 use support::pagination::Pagination;
 
 use super::data::GetIssuesParams;
@@ -11,7 +11,7 @@ pub trait DbRepositoryContract {
         &self,
         repository_id: Uuid,
         params: GetIssuesParams,
-    ) -> Result<Pagination<Issues>>;
+    ) -> Result<Pagination<GithubIssue>>;
     async fn get_repository(&self, id: Uuid) -> Result<RepositoryView>;
 }
 
@@ -21,6 +21,6 @@ pub trait RepositoryContract {
         &self,
         repository_id: Uuid,
         params: GetIssuesParams,
-    ) -> Result<Pagination<Issues>>;
+    ) -> Result<Pagination<GithubIssue>>;
     async fn get_repository(&self, id: Uuid) -> Result<RepositoryView>;
 }

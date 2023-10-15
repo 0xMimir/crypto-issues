@@ -8,7 +8,7 @@ use super::super::contract::RepositoryContract;
 
 #[utoipa::path(
     get,
-    path = "/api/{version}/repository/{id}",
+    path = "/api/v1/repository/{id}",
     params(
         ("id", description = "Repository id")
     ),
@@ -16,7 +16,7 @@ use super::super::contract::RepositoryContract;
         (
             status = 200,
             description = "Crypto currency data with all full data for repositories",
-            body = [Model]
+            body = RepositoryView
         )
     )
 )]

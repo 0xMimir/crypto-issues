@@ -74,7 +74,7 @@ impl<
             self.service
                 .create_repository(github.id, repositories)
                 .await?;
-            
+
             page += 1;
         }
 

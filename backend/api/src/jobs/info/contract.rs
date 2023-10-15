@@ -33,9 +33,9 @@ pub trait DbServiceContract {
     /// Create entry in `github_projects` table
     ///
     async fn create_github(&self, project: String) -> Result<Uuid>;
-    
+
     ///
     /// Delete entry from `cryptocurrencies` table
-    /// 
+    ///
     async fn delete_crypto(&self, id: Uuid) -> Result<()>;
 }

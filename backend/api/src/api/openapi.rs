@@ -6,7 +6,14 @@ use actix_web::{
 use utoipa::{openapi::OpenApi, OpenApi as Trait};
 
 #[derive(Trait)]
-#[openapi(paths(hello_there))]
+#[openapi(
+    paths(hello_there),
+    servers((url = "http://localhost:1111")),
+    info(
+        title = "Crypto Issues", 
+        description = "Api to track issues for cryptocurrencies"
+    )
+)]
 pub struct OpenApiDocsFactory;
 
 impl OpenApiDocsFactory {

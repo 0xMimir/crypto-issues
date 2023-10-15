@@ -7,9 +7,8 @@ use sea_orm::{
 };
 use std::sync::Arc;
 use store::{
-    github_projects, github_repositories,
-    issues::{self, Model as Issues},
-    objects::RepositoryView,
+    github_projects, github_repositories, issues,
+    objects::{GithubIssue, RepositoryView},
 };
 use support::pagination::Pagination;
 
@@ -31,7 +30,7 @@ impl DbRepositoryContract for PgRepository {
         &self,
         repository_id: Uuid,
         params: GetIssuesParams,
-    ) -> Result<Pagination<Issues>> {
+    ) -> Result<Pagination<GithubIssue>> {
         let mut query = issues::Entity::find().filter(issues::Column::Repository.eq(repository_id));
 
         if let Some(closed) = params.closed {
@@ -53,7 +52,7 @@ impl DbRepositoryContract for PgRepository {
 
         let query = query
             .order_by(Expr::cust(order_by), order.into())
-            .into_model::<Issues>()
+            .into_model::<GithubIssue>()
             .paginate(self.conn.as_ref(), per_page);
 
         let pagination = query.num_items_and_pages().await?;

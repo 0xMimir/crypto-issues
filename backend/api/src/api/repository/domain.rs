@@ -4,7 +4,7 @@ use super::{
 };
 use error::Result;
 use sea_orm::prelude::Uuid;
-use store::{issues::Model as Issue, objects::RepositoryView};
+use store::objects::{GithubIssue, RepositoryView};
 use support::pagination::Pagination;
 
 pub struct Repository<A: DbRepositoryContract> {
@@ -21,7 +21,7 @@ impl<A: DbRepositoryContract + Send + Sync> RepositoryContract for Repository<A>
         &self,
         repository_id: Uuid,
         params: GetIssuesParams,
-    ) -> Result<Pagination<Issue>> {
+    ) -> Result<Pagination<GithubIssue>> {
         self.repository
             .get_issues_for_repository(repository_id, params)
             .await

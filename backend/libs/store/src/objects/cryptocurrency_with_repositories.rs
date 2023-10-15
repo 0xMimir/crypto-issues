@@ -1,6 +1,6 @@
 use sea_orm::{prelude::Uuid, FromQueryResult};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct CryptoCurrencyWithRepositories {
     pub id: Uuid,
@@ -12,7 +12,7 @@ pub struct CryptoCurrencyWithRepositories {
     pub issues: u64,
 }
 
-#[derive(Serialize, FromQueryResult, Deserialize)]
+#[derive(Serialize, FromQueryResult, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct Repository {
     pub id: Uuid,

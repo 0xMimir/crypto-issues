@@ -10,3 +10,5 @@ config.workspace = true
 error.workspace = true
 sea-orm.workspace = true
 serde.workspace = true
+store.workspace = true
+utoipa.workspace = true

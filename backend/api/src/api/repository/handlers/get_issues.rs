@@ -16,7 +16,7 @@ use validify::Validate;
         (
             status = 200,
             description = "List of issues for repository",
-            body = [Model]
+            body = PaginatedGithubIssue
         )
     )
 )]
@@ -32,5 +32,6 @@ pub async fn get_issues<S: RepositoryContract>(
     let value = service
         .get_issues_for_repository(repository_id, query)
         .await?;
+
     Ok(HttpResponse::Ok().json(value))
 }

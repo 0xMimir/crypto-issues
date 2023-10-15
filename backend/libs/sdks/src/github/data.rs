@@ -7,7 +7,7 @@ pub struct GithubRepository {
     pub name: String,
     pub language: Option<String>,
     pub stargazers_count: i64,
-    pub forks_count: i64
+    pub forks_count: i64,
 }
 
 #[derive(Deserialize)]

@@ -2,7 +2,11 @@ use actix_web::{get, HttpResponse};
 
 #[utoipa::path(
     responses(
-        (status = 200, description = "List current todo items", body = String)
+        (
+            status = 200,
+            description = "List current todo items", 
+            body = String,
+            example = json!("General Kenobi"))
     )
 )]
 #[get("/hello-there")]

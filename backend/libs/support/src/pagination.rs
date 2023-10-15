@@ -1,5 +1,12 @@
-#[derive(Serialize, Deserialize)]
+use store::objects::{CryptoCurrencyView, GithubIssue};
+use utoipa::ToSchema;
+
+#[derive(Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
+#[aliases(
+    PaginatedCryptoCurrencyView = Pagination<CryptoCurrencyView>,
+    PaginatedGithubIssue = Pagination<GithubIssue>
+)]
 pub struct Pagination<T> {
     pub page: u64,
     pub per_page: u64,

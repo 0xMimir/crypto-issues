@@ -6,3 +6,6 @@ pub use cryptocurrency_with_repositories::{CryptoCurrencyWithRepositories, Repos
 
 mod repository_view;
 pub use repository_view::RepositoryView;
+
+mod issues;
+pub use issues::GithubIssue;
