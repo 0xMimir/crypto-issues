@@ -23,6 +23,7 @@ impl OpenApiDocsFactory {
         let docs = [
             super::cryptocurrencies::docs::CryptocurrenciesDocs::openapi(),
             super::repository::docs::RepositoryDocs::openapi(),
+            super::statistics::docs::StatisticsDocs::openapi(),
         ];
 
         for doc in docs {

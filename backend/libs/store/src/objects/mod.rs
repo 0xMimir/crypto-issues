@@ -9,3 +9,6 @@ pub use repository_view::RepositoryView;
 
 mod issues;
 pub use issues::GithubIssue;
+
+mod language_count;
+pub use language_count::LanguageCount;
