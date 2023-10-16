@@ -4,39 +4,15 @@
 
 Scan crypto currency repositories for open issues.
 
-## Backend
 
-To run backend run following steps from `backend` directory
+## [Backend](backend/README.md)
 
-To run locally first setup postgres database with
+## [Frontend](frontend/README.md)
+
+
+## Docker
+
+Both frontend and backend have docker images whole project can be ran with
 ```sh
 docker compose up -d
-```
-
-Then run migrations with:
-```sh
-diesel setup
-diesel migration run
-```
-
-First seed the database with:
-```sh
-cargo run --bin init
-```
-
-This should take about 1-2 hours
-
-Then run api and cron with:
-```sh
-cargo run --bin api
-```
-
-To generate store run: 
-```sh
-sea generate entity -o libs/store/src/migrations --model-extra-derives Serialize,Deserialize --model-extra-attributes 'serde(rename_all = "camelCase")'
-```
-
-To build docker image run:
-```sh
-docker build -t crypto-issues .
 ```
