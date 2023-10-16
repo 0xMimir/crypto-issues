@@ -21,4 +21,9 @@ pub trait DbServiceContract {
         project_id: Uuid,
         repositories: Vec<GithubRepository>,
     ) -> Result<()>;
+
+    ///
+    /// Delete github project
+    ///
+    async fn delete_project(&self, id: Uuid) -> Result<()>;
 }

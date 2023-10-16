@@ -6,7 +6,10 @@ use sea_orm::{
 use std::sync::Arc;
 
 use super::super::contract::DbServiceContract;
-use store::github_repositories::{ActiveModel, Column, Entity};
+use store::{
+    github_projects,
+    github_repositories::{ActiveModel, Column, Entity},
+};
 
 pub struct PgService {
     conn: Arc<DatabaseConnection>,
@@ -34,6 +37,8 @@ impl DbServiceContract for PgService {
                 language: Set(repository.language),
                 stargazers_count: Set(repository.stargazers_count),
                 forks_count: Set(repository.forks_count),
+                created_at: Set(repository.created_at),
+                updated_at: Set(repository.updated_at),
             })
             .collect::<Vec<_>>();
 
@@ -47,6 +52,14 @@ impl DbServiceContract for PgService {
 
         Entity::insert_many(models)
             .on_conflict(on_conflict)
+            .exec(self.conn.as_ref())
+            .await?;
+
+        Ok(())
+    }
+
+    async fn delete_project(&self, id: Uuid) -> Result<()> {
+        github_projects::Entity::delete_by_id(id)
             .exec(self.conn.as_ref())
             .await?;
 

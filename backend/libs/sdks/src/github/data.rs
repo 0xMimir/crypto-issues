@@ -8,6 +8,10 @@ pub struct GithubRepository {
     pub language: Option<String>,
     pub stargazers_count: i64,
     pub forks_count: i64,
+    #[serde(deserialize_with = "deserialize_datetime")]
+    pub created_at: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_datetime")]
+    pub updated_at: NaiveDateTime,
 }
 
 #[derive(Deserialize)]
@@ -41,6 +45,8 @@ pub struct GithubIssue {
     pub description: Option<String>,
     #[serde(deserialize_with = "deserialize_datetime")]
     pub created_at: NaiveDateTime,
+    #[serde(deserialize_with = "deserialize_datetime")]
+    pub updated_at: NaiveDateTime,
     pub state: State,
 }
 
@@ -56,4 +62,15 @@ pub fn deserialize_datetime<'de, D: Deserializer<'de>>(
 ) -> Result<NaiveDateTime, D::Error> {
     let time: String = Deserialize::deserialize(deserializer)?;
     NaiveDateTime::parse_from_str(&time, "%Y-%m-%dT%H:%M:%SZ").map_err(D::Error::custom)
+}
+
+#[derive(Deserialize)]
+pub struct RateLimitResponse {
+    pub rate: RateLimit,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct RateLimit {
+    pub remaining: u64,
+    pub reset: i64,
 }

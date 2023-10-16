@@ -1,15 +1,15 @@
 use std::sync::Arc;
 
-use actix_web::web::{ServiceConfig, self, resource, Data};
+use actix_web::web::{self, resource, Data, ServiceConfig};
 use sea_orm::DatabaseConnection;
 
-use self::{domain::Statistics, infrastructure::PgRepository, handlers::*};
+use self::{domain::Statistics, handlers::*, infrastructure::PgRepository};
 
-mod handlers;
-mod infrastructure;
 mod contract;
 pub mod docs;
 mod domain;
+mod handlers;
+mod infrastructure;
 
 pub fn setup(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
     let state = Statistics {

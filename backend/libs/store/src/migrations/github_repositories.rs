@@ -13,6 +13,8 @@ pub struct Model {
     pub language: Option<String>,
     pub stargazers_count: i64,
     pub forks_count: i64,
+    pub created_at: DateTime,
+    pub updated_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

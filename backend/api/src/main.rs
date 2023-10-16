@@ -2,15 +2,12 @@ use api::{create_api, setup_jobs};
 use config::dotenv_init;
 use sea_orm::Database;
 use std::sync::Arc;
+use support::logger::setup_logger;
 
 #[tokio::main]
 #[cfg(not(tarpaulin_include))]
 async fn main() {
-    env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .filter_module("sqlx::query", log::LevelFilter::Off) // Set to warn so it doesn't print sea orm queries
-        .init();
-
+    setup_logger();
     dotenv_init();
 
     let db_url = config::get("DATABASE_URL").unwrap();

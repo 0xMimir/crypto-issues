@@ -5,5 +5,7 @@ create table github_repositories(
     language varchar(255),
     stargazers_count bigint not null,
     forks_count bigint not null,
+    created_at timestamp not null,
+    updated_at timestamp not null,
     unique(project, repository_name)
 )

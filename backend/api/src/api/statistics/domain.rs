@@ -1,6 +1,6 @@
 use super::contract::{DbRepositoryContract, StatisticsContract};
-use store::objects::LanguageCount;
 use error::Result;
+use store::objects::LanguageCount;
 
 pub struct Statistics<Repository: DbRepositoryContract> {
     pub repository: Repository,

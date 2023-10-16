@@ -4,8 +4,8 @@ use super::{
     data::{CryptoInfo, ErrorResponse},
     CoinGeckoContract, SimpleCoin,
 };
-use error::Result;
-use reqwest::{Client, IntoUrl};
+use error::{Error, Result};
+use reqwest::{Client, IntoUrl, StatusCode};
 use serde::de::DeserializeOwned;
 
 const COINS_LIST_URL: &str = "https://api.coingecko.com/api/v3/coins/list";
@@ -21,7 +21,15 @@ impl CoinGecko {
         U: IntoUrl + Send + Sync,
         R: DeserializeOwned + 'static,
     {
-        let response = self.client.get(url).send().await?.text().await?;
+        let response = self.client.get(url).send().await?;
+        let status = response.status();
+
+        match status {
+            StatusCode::NOT_FOUND => return Err(Error::NotFound),
+            _ => (),
+        };
+        
+        let response = response.text().await?;
 
         let error = match serde_json::from_str(&response) {
             Ok(response) => return Ok(response),
@@ -30,6 +38,10 @@ impl CoinGecko {
 
         if let Ok(error) = serde_json::from_str::<ErrorResponse>(&response) {
             return Err(error.into());
+        }
+
+        if response == "Throttled" {
+            return Err(Error::RateLimitExceeded);
         }
 
         match serde_json::from_str::<SimpleError>(&response) {

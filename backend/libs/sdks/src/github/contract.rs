@@ -1,6 +1,6 @@
 use error::Result;
 
-use super::data::{GithubIssue, GithubRepository};
+use super::data::{GithubIssue, GithubRepository, RateLimit};
 
 #[async_trait]
 pub trait GithubContract {
@@ -18,4 +18,9 @@ pub trait GithubContract {
         repository: &str,
         page: u64,
     ) -> Result<Vec<GithubIssue>>;
+
+    ///
+    /// Get rate limit
+    ///
+    async fn get_rate_limit(&self) -> Result<RateLimit>;
 }

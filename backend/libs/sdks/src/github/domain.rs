@@ -1,5 +1,5 @@
 use super::{
-    data::{ErrorResponse, GithubIssue, GithubRepository},
+    data::{ErrorResponse, GithubIssue, GithubRepository, RateLimit, RateLimitResponse},
     GithubContract,
 };
 use error::{Error, Result};
@@ -77,6 +77,11 @@ impl GithubContract for Github {
         self.get(url)
             .await
             .map_err(|e| e.add_cause(format!("{}/{}", project, repository)))
+    }
+
+    async fn get_rate_limit(&self) -> Result<RateLimit> {
+        let response: RateLimitResponse = self.get("https://api.github.com/rate_limit").await?;
+        Ok(response.rate)
     }
 }
 

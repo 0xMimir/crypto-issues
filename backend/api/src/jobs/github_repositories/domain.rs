@@ -43,8 +43,14 @@ impl<
         let projects = self.repository.get_projects().await?;
 
         for project in projects {
+            let project_id = project.id;
             if let Err(error) = self.download_repos_for_project(project).await {
-                error!("{}", error);
+                match error {
+                    Error::NotFoundWithCause(_) | Error::NotFound => {
+                        self.service.delete_project(project_id).await?;
+                    }
+                    _ => error!("{}", error),
+                };
             }
         }
         Ok(())
