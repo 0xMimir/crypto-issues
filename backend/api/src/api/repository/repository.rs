@@ -142,6 +142,10 @@ impl DbRepositoryContract for PgRepository {
             query = query.filter(github_projects::Column::Name.eq(project));
         }
 
+        if let Some(fork) = params.fork {
+            query = query.filter(github_repositories::Column::Fork.eq(fork));
+        }
+
         let order_by = params.order_by.unwrap_or("updated_at".to_owned());
         let order = params.order.unwrap_or(support::order::Order::Desc);
         let per_page = params.per_page.unwrap_or(50);

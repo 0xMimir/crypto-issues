@@ -1,5 +1,4 @@
 use crate::request::request;
-use chrono::NaiveDateTime;
 use error::Result;
 use reqwest::Method;
 use sea_orm::{
@@ -7,6 +6,8 @@ use sea_orm::{
 };
 use store::{cryptocurrencies, github_projects, github_repositories, objects::CryptoCurrencyView};
 use support::pagination::Pagination;
+
+use super::helpers::default_github_repo;
 
 ///
 /// Test function for /api/v1/crypto
@@ -60,17 +61,7 @@ async fn setup(
         .exec_with_returning(sea_pool)
         .await?;
 
-    let github_repo = github_repositories::ActiveModel {
-        project: Set(github.id),
-        repository_name: Set("good-repo".to_owned()),
-        stargazers_count: Set(0),
-        forks_count: Set(0),
-        id: Default::default(),
-        language: Set(None),
-        created_at: Set(NaiveDateTime::default()),
-        updated_at: Set(NaiveDateTime::default()),
-        archived: Set(false),
-    };
+    let github_repo = default_github_repo(github.id);
 
     github_repositories::Entity::insert(github_repo)
         .on_conflict(OnConflict::default().do_nothing().to_owned())
