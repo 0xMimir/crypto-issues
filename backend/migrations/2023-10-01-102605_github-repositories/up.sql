@@ -7,5 +7,6 @@ create table github_repositories(
     forks_count bigint not null,
     created_at timestamp not null,
     updated_at timestamp not null,
+    archived boolean not null,
     unique(project, repository_name)
 )

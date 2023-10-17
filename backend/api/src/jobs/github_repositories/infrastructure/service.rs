@@ -39,15 +39,18 @@ impl DbServiceContract for PgService {
                 forks_count: Set(repository.forks_count),
                 created_at: Set(repository.created_at),
                 updated_at: Set(repository.updated_at),
+                archived: Set(repository.archived)
             })
             .collect::<Vec<_>>();
 
         let mut on_conflict = OnConflict::columns([Column::Project, Column::RepositoryName]);
 
         on_conflict.update_columns([
-            Column::ForksCount,
             Column::StargazersCount,
+            Column::ForksCount,
             Column::Language,
+            Column::UpdatedAt,
+            Column::Archived,
         ]);
 
         Entity::insert_many(models)

@@ -1,9 +1,9 @@
 use error::Result;
-use sea_orm::{DatabaseConnection, EntityTrait};
+use sea_orm::{DatabaseConnection, EntityTrait, Order, QueryOrder};
 use std::sync::Arc;
 
 use super::super::contract::DbRepositoryContract;
-use store::github_projects::{Entity, Model};
+use store::github_projects::{Column, Entity, Model};
 
 pub struct PgRepository {
     conn: Arc<DatabaseConnection>,
@@ -18,7 +18,11 @@ impl PgRepository {
 #[async_trait]
 impl DbRepositoryContract for PgRepository {
     async fn get_projects(&self) -> Result<Vec<Model>> {
-        let projects = Entity::find().all(self.conn.as_ref()).await?;
+        let projects = Entity::find()
+            .order_by(Column::Name, Order::Asc)
+            .all(self.conn.as_ref())
+            .await?;
+        
         Ok(projects)
     }
 }
