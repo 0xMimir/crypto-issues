@@ -12,3 +12,6 @@ pub use issues::GithubIssue;
 
 mod language_count;
 pub use language_count::LanguageCount;
+
+mod search_repository;
+pub use search_repository::SearchRepository;

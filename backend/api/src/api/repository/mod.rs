@@ -20,6 +20,11 @@ pub fn setup(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
     config.app_data(Data::new(state));
 
     config.service(
+        resource("/api/{version}/repository/search")
+            .route(web::get().to(get_search::<Repository<PgRepository>>)),
+    );
+
+    config.service(
         resource("/api/{version}/repository/{id}")
             .route(web::get().to(get_repository_by_id::<Repository<PgRepository>>)),
     );

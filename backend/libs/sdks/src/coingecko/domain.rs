@@ -28,7 +28,7 @@ impl CoinGecko {
             StatusCode::NOT_FOUND => return Err(Error::NotFound),
             _ => (),
         };
-        
+
         let response = response.text().await?;
 
         let error = match serde_json::from_str(&response) {
@@ -40,7 +40,7 @@ impl CoinGecko {
             return Err(error.into());
         }
 
-        if response == "Throttled" {
+        if response.contains("Throttled") {
             return Err(Error::RateLimitExceeded);
         }
 
