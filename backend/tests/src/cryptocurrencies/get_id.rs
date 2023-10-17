@@ -1,4 +1,5 @@
 use crate::request::request;
+use chrono::NaiveDateTime;
 use error::{ErrorResponse, Result};
 use reqwest::Method;
 use sea_orm::{
@@ -63,7 +64,8 @@ async fn setup(
         name: Set("Test coin 1000".to_owned()),
         coingecko_id: Set("test-coin-at-coingecko".to_owned()),
         github: Set(Some(github.id)),
-        ..Default::default()
+        gitlab: Default::default(),
+        description: Default::default(),
     };
 
     let crypto = cryptocurrencies::Entity::insert(crypto)
@@ -76,7 +78,11 @@ async fn setup(
         repository_name: Set("good-repo".to_owned()),
         stargazers_count: Set(0),
         forks_count: Set(0),
-        ..Default::default()
+        id: Default::default(),
+        language: Set(None),
+        created_at: Set(NaiveDateTime::default()),
+        updated_at: Set(NaiveDateTime::default()),
+        archived: Set(false),
     };
 
     github_repositories::Entity::insert(github_repo)

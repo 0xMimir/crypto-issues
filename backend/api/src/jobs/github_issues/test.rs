@@ -1,3 +1,4 @@
+use chrono::NaiveDateTime;
 use sea_orm::{prelude::Uuid, sea_query::OnConflict, EntityTrait, Set};
 use store::{github_projects, github_repositories, issues};
 use support::{count::count, db_pool::create_db_pool};
@@ -51,7 +52,11 @@ async fn test_setup() {
         repository_name: Set("bitcoin".to_owned()),
         stargazers_count: Set(0),
         forks_count: Set(0),
-        ..Default::default()
+        id: Default::default(),
+        language: Set(None),
+        created_at: Set(NaiveDateTime::default()),
+        updated_at: Set(NaiveDateTime::default()),
+        archived: Set(false),
     };
 
     github_repositories::Entity::insert(model)

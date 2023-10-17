@@ -1,4 +1,5 @@
 use crate::request::request;
+use chrono::NaiveDateTime;
 use error::Result;
 use reqwest::Method;
 use sea_orm::{
@@ -60,7 +61,11 @@ async fn setup(
         repository_name: Set("good-repo".to_owned()),
         stargazers_count: Set(0),
         forks_count: Set(0),
-        ..Default::default()
+        id: Default::default(),
+        language: Set(None),
+        created_at: Set(NaiveDateTime::default()),
+        updated_at: Set(NaiveDateTime::default()),
+        archived: Set(false),
     };
 
     github_repositories::Entity::insert(github_repo)
