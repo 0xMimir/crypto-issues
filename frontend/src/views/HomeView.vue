@@ -5,7 +5,7 @@ import { ref } from "vue";
 
 const cryptoCurrencies = ref<CryptoCurrencyView[]>([]);
 const page = ref(0);
-const perPage = ref(100);
+const perPage = ref(20);
 const lastPage = ref(0);
 const store = useCryptocurrenciesStore();
 
@@ -25,6 +25,7 @@ loadData();
 </script>
 <template>
   <div v-if="cryptoCurrencies.length !== 0">
+    <h1>Cryptocurrencies: </h1>
     <DataTable :value="cryptoCurrencies" showGridlines>
       <Column field="name" header="Name">
         <template #body="slotProps">

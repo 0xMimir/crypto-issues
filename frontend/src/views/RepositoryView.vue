@@ -32,50 +32,51 @@ loadData();
 store
   .getRepository(repositoryId)
   .then((response) => (repository.value = response));
-
 </script>
 <template>
-  <div v-if="repository">
-    <h2>
-      Project:
-      <a class="link" :href="`https://github.com/${repository.project}`">{{
-        repository.project
-      }}</a>
-    </h2>
-    <h3>
-      Repository:
-      <a
-        class="link"
-        :href="`https://github.com/${repository.project}/${repository.name}`"
-        >{{ repository.name }}</a
-      >
-    </h3>
-  </div>
-  <div v-if="issues.length !== 0 && repository">
-    <DataTable :value="issues" showGridlines>
-      <Column field="name" header="Name">
-        <template #body="slotProps">
-          <a
-            class="link"
-            :href="`https://github.com/${repository.project}/${repository.name}/issues/${slotProps.data.issue}`"
-          >
-            #{{ slotProps.data.issue }}
-          </a>
-        </template>
-      </Column>
-      <Column field="title" header="Title"></Column>
-      <Column field="createdAt" header="Created At">
-        <template #body="slotProps">
-          {{ formatDate(new Date(slotProps.data.createdAt)) }}
-        </template></Column
-      >
-    </DataTable>
-    <Paginator
-      :rows="perPage"
-      :totalRecords="lastPage"
-      :page="page"
-      @page="changePage"
-    ></Paginator>
+  <div>
+    <div v-if="repository">
+      <h2>
+        Project:
+        <a class="link" :href="`https://github.com/${repository.project}`">{{
+          repository.project
+        }}</a>
+      </h2>
+      <h3>
+        Repository:
+        <a
+          class="link"
+          :href="`https://github.com/${repository.project}/${repository.name}`"
+          >{{ repository.name }}</a
+        >
+      </h3>
+    </div>
+    <div v-if="issues.length !== 0 && repository">
+      <DataTable :value="issues" showGridlines>
+        <Column field="name" header="Name">
+          <template #body="slotProps">
+            <a
+              class="link"
+              :href="`https://github.com/${repository.project}/${repository.name}/issues/${slotProps.data.issue}`"
+            >
+              #{{ slotProps.data.issue }}
+            </a>
+          </template>
+        </Column>
+        <Column field="title" header="Title"></Column>
+        <Column field="createdAt" header="Created At">
+          <template #body="slotProps">
+            {{ formatDate(new Date(slotProps.data.createdAt)) }}
+          </template>
+        </Column>
+      </DataTable>
+      <Paginator
+        :rows="perPage"
+        :totalRecords="lastPage"
+        :page="page"
+        @page="changePage"
+      ></Paginator>
+    </div>
   </div>
 </template>
 <style scoped>

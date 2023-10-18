@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import CryptoView from '@/views/CryptoView.vue'
 import RepositoryView from '@/views/RepositoryView.vue';
+import StatisticsView from '@/views/StatisticsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/repository/:id',
       name: 'repository',
       component: RepositoryView
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: StatisticsView
     }
   ]
 })

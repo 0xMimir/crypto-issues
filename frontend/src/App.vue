@@ -1,25 +1,15 @@
-<script setup lang="ts"></script>
-
+<script setup lang="ts">
+import NavBar from "@/components/NavBar.vue";
+</script>
 <template>
-  <header>
-    <RouterLink to="/" class="link">Crypto Issues</RouterLink>
-  </header>
-  <br />
-  <div class="wrapper">
-    <RouterView />
+  <div>
+    <NavBar />
+    <div class="wrapper">
+      <RouterView />
+    </div>
   </div>
 </template>
 <style scoped>
-header {
-  font-size: x-large;
-  padding: 0.5rem;
-  font-size: xx-large;
-}
-.link,
-.link :visited {
-  color: inherit;
-  text-decoration: none;
-}
 .wrapper {
   width: 80%;
   margin: auto;

@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 import { client } from "./axios";
 import type { Issue } from "@/types/issues";
 import type { RepositoryView } from "@/types/repositoryView";
+import type { LanguageCount } from "@/types/languageCount";
 
 export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
   actions: {
@@ -26,12 +27,12 @@ export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
       return response.data;
     },
 
-    async getRepository(id: string): Promise<RepositoryView>{
+    async getRepository(id: string): Promise<RepositoryView> {
       const response = await client.get(`/api/v1/repository/${id}`);
       return response.data;
     },
 
-    async getIssues(repositoryId: string, page: number, perPage: number): Promise<Pagination<Issue>>{
+    async getIssues(repositoryId: string, page: number, perPage: number): Promise<Pagination<Issue>> {
       const response = await client.get(`/api/v1/repository/${repositoryId}/issues`, {
         params: {
           page,
@@ -39,6 +40,11 @@ export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
         }
       });
       return response.data
+    },
+
+    async getLanguageCounts(): Promise<LanguageCount[]> {
+      const response = await client.get('/api/v1/statistics/languages-count');
+      return response.data;
     }
   },
 });
