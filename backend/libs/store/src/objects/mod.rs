@@ -15,3 +15,6 @@ pub use language_count::LanguageCount;
 
 mod search_repository;
 pub use search_repository::SearchRepository;
+
+mod search_github_project;
+pub use search_github_project::SearchGithubProject;

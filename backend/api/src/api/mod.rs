@@ -11,6 +11,7 @@ mod kenobi;
 mod openapi;
 mod repository;
 mod statistics;
+mod projects;
 
 pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
     let workers = match config::get_default("IS_DEV", "false").as_str() == "true" {

@@ -30,16 +30,15 @@ impl DbServiceContract for PgService {
                 description: Set(issue.description),
                 created_at: Set(issue.created_at),
                 closed: Set(issue.state == State::Closed),
-                ..Default::default()
+                id: Default::default(),
             })
             .collect::<Vec<_>>();
 
+        let mut on_conflict = OnConflict::columns([Column::Repository, Column::Issue]);
+        on_conflict.update_columns([Column::Title, Column::Description, Column::Closed]);
+
         Entity::insert_many(models)
-            .on_conflict(
-                OnConflict::columns([Column::Repository, Column::Issue])
-                    .update_columns([Column::Title, Column::Description, Column::Closed])
-                    .to_owned(),
-            )
+            .on_conflict(on_conflict)
             .exec(self.conn.as_ref())
             .await?;
 

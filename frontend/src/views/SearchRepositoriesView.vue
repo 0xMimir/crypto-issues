@@ -8,7 +8,7 @@ const store = useCryptocurrenciesStore();
 
 const repositories = ref<SearchRepository[]>([]);
 const perPage = ref(50);
-const page = ref(1);
+const page = ref(0);
 const totalRecords = ref(0);
 const archived = ref<any | undefined>(undefined);
 const fork = ref<any | undefined>(undefined);
@@ -56,7 +56,7 @@ watch([perPage, page, archived, fork, language], search);
 </script>
 
 <template>
-    <div v-if="repositories.length">
+    <div>
         <h1>Repositories</h1>
         <div>
             <Dropdown v-model="archived" :options="archivedOptions" optionLabel="name" placeholder="Status" showClear
@@ -67,34 +67,37 @@ watch([perPage, page, archived, fork, language], search);
                 showClear class="dropdown" />
         </div>
         <br>
-        <DataTable :value="repositories" showGridlines>
-            <Column field="repositoryName" header="Name">
-                <template #body="slotProps">
-                    <a class="link" :href="slotProps.data.url">
-                        {{ slotProps.data.project }}/{{ slotProps.data.repositoryName }}
-                    </a>
-                </template>
-            </Column>
-            <Column field="language" header="Language"></Column>
-            <Column field="stargazersCount" header="Stargazers"></Column>
-            <Column field="createdAt" header="Created At">
-                <template #body="slotProps">
-                    {{ formatDate(new Date(slotProps.data.createdAt)) }}
-                </template>
-            </Column>
-            <Column field="updatedAt" header="Updated At">
-                <template #body="slotProps">
-                    {{ formatDate(new Date(slotProps.data.updatedAt)) }}
-                </template>
-            </Column>
-            <Column field="forksCount" header="Forks"></Column>
-            <Column field="fork" header="Fork"></Column>
-            <Column field="archived" header="Archived"></Column>
-        </DataTable>
-        <Paginator :rows="perPage" :totalRecords="totalRecords" :page="page" @page="changePage"></Paginator>
-    </div>
-    <div v-else class="spinner">
-        <ProgressSpinner />
+        <div v-if="repositories.length">
+
+            <DataTable :value="repositories" showGridlines>
+                <Column field="repositoryName" header="Name">
+                    <template #body="slotProps">
+                        <a class="link" :href="slotProps.data.url">
+                            {{ slotProps.data.project }}/{{ slotProps.data.repositoryName }}
+                        </a>
+                    </template>
+                </Column>
+                <Column field="language" header="Language"></Column>
+                <Column field="stargazersCount" header="Stargazers"></Column>
+                <Column field="createdAt" header="Created At">
+                    <template #body="slotProps">
+                        {{ formatDate(new Date(slotProps.data.createdAt)) }}
+                    </template>
+                </Column>
+                <Column field="updatedAt" header="Updated At">
+                    <template #body="slotProps">
+                        {{ formatDate(new Date(slotProps.data.updatedAt)) }}
+                    </template>
+                </Column>
+                <Column field="forksCount" header="Forks"></Column>
+                <Column field="fork" header="Fork"></Column>
+                <Column field="archived" header="Archived"></Column>
+            </DataTable>
+            <Paginator :rows="perPage" :totalRecords="totalRecords" :page="page" @page="changePage"></Paginator>
+        </div>
+        <div v-else class="spinner">
+            <ProgressSpinner />
+        </div>
     </div>
 </template>
 <style scoped>

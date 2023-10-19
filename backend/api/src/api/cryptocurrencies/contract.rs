@@ -7,7 +7,14 @@ use super::data::GetCryptoCurrenciesQuery;
 
 #[async_trait]
 pub trait DbRepositoryContract {
+    ///
+    /// Get cryptocurrency and it's repositories from id
+    ///
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories>;
+
+    ///
+    /// Get cryptocurrencies corresponding to query parameters
+    ///
     async fn get_cryptocurrencies(
         &self,
         query: GetCryptoCurrenciesQuery,
@@ -16,7 +23,14 @@ pub trait DbRepositoryContract {
 
 #[async_trait]
 pub trait CryptocurrenciesContract {
+    ///
+    /// Get cryptocurrency and it's repositories from id
+    ///
     async fn get_cryptocurrency(&self, id: Uuid) -> Result<CryptoCurrencyWithRepositories>;
+
+    ///
+    /// Get cryptocurrencies corresponding to query parameters
+    ///
     async fn get_cryptocurrencies(
         &self,
         query: GetCryptoCurrenciesQuery,
