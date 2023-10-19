@@ -12,6 +12,7 @@ pub struct SearchRepository {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub archived: bool,
+    pub fork: bool,
     pub project_id: Uuid,
     pub project: String,
     pub url: String,
