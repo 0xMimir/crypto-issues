@@ -10,7 +10,7 @@ export interface SearchRepository {
     projectId: string;
     project: string;
     url: string;
-};
+}
 
 export interface SearchRepositoryParams {
     orderBy?: string;
@@ -23,4 +23,4 @@ export interface SearchRepositoryParams {
     project?: string;
     archived?: boolean;
     fork?: boolean;
-};
+}

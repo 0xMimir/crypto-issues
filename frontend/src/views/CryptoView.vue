@@ -16,20 +16,13 @@ store.getCryptocurrency(cryptoId).then((response) => (crypto.value = response));
       <h1>{{ crypto.name }}</h1>
       <p>
         Coingecko:
-        <a
-          class="link"
-          :href="`https://coingecko.com/en/coins/${crypto.coingeckoId}`"
-          rel="noopener"
-          >{{ crypto.coingeckoId }}
+        <a class="link" :href="`https://coingecko.com/en/coins/${crypto.coingeckoId}`" rel="noopener">{{
+          crypto.coingeckoId }}
         </a>
       </p>
       <p>
         Github:
-        <a
-          class="link"
-          :href="`https://github.com/${crypto.github}`"
-          rel="noopener"
-          >{{ crypto.github }}
+        <a class="link" :href="`https://github.com/${crypto.github}`" rel="noopener">{{ crypto.github }}
         </a>
       </p>
     </div>
@@ -48,16 +41,14 @@ store.getCryptocurrency(cryptoId).then((response) => (crypto.value = response));
         <Column field="forksCount" header="Forks"></Column>
         <Column field="github" header="Github">
           <template #body="slotProps">
-            <a
-              class="link"
-              :href="`https://github.com/${crypto.github}/${slotProps.data.repositoryName}`"
-              rel="noopener"
-              >github</a
-            >
+            <a class="link" :href="`https://github.com/${crypto.github}/${slotProps.data.repositoryName}`"
+              rel="noopener">github</a>
           </template>
         </Column>
       </DataTable>
     </div>
   </div>
-  <div v-else>Loading</div>
+  <div v-else class="spinner">
+    <ProgressSpinner />
+  </div>
 </template>

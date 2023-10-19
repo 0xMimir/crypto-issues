@@ -26,55 +26,33 @@ loadData();
 <template>
   <div>
     <h1>Cryptocurrencies: </h1>
-    <DataTable :value="cryptoCurrencies" showGridlines>
-      <Column field="name" header="Name">
-        <template #body="slotProps">
-          <RouterLink class="link" :to="`/crypto/${slotProps.data.id}`">
-            {{ slotProps.data.name }}
-          </RouterLink>
-        </template>
-      </Column>
-      <Column field="coingeckoId" header="Coingecko Id"></Column>
-      <Column field="github" header="Github">
-        <template #body="slotProps">
-          <a
-            class="link"
-            :href="`https://github.com/${slotProps.data.github}`"
-            rel="noopener"
-            >{{ slotProps.data.github }}</a
-          >
-        </template>
-      </Column>
-      <Column header="Repositories">
-        <template #body="slotProps">
-          <td>{{ slotProps.data.repositories.length }}</td>
-        </template>
-      </Column>
-      <Column field="issues" header="Issues"></Column>
-    </DataTable>
-    <Paginator
-      :rows="perPage"
-      :totalRecords="lastPage"
-      @page="changePage"
-    ></Paginator>
+    <div v-if="cryptoCurrencies.length">
+      <DataTable :value="cryptoCurrencies" showGridlines>
+        <Column field="name" header="Name">
+          <template #body="slotProps">
+            <RouterLink class="link" :to="`/crypto/${slotProps.data.id}`">
+              {{ slotProps.data.name }}
+            </RouterLink>
+          </template>
+        </Column>
+        <Column field="coingeckoId" header="Coingecko Id"></Column>
+        <Column field="github" header="Github">
+          <template #body="slotProps">
+            <a class="link" :href="`https://github.com/${slotProps.data.github}`" rel="noopener">{{ slotProps.data.github
+            }}</a>
+          </template>
+        </Column>
+        <Column header="Repositories">
+          <template #body="slotProps">
+            <td>{{ slotProps.data.repositories.length }}</td>
+          </template>
+        </Column>
+        <Column field="issues" header="Issues"></Column>
+      </DataTable>
+      <Paginator :rows="perPage" :totalRecords="lastPage" @page="changePage"></Paginator>
+    </div>
+    <div v-else class="spinner">
+      <ProgressSpinner />
+    </div>
   </div>
 </template>
-<style>
-.link,
-.link :visited {
-  color: inherit;
-  text-decoration: none;
-}
-.p-paginator-page,
-.p-paginator-prev,
-.p-paginator-next,
-.p-paginator-last,
-.p-paginator-first {
-  font-size: larger;
-  color: var(--vt-c-text-dark-2);
-}
-
-.p-paginator-page {
-  margin: 0.5rem;
-}
-</style>

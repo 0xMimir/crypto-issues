@@ -44,21 +44,15 @@ store
       </h2>
       <h3>
         Repository:
-        <a
-          class="link"
-          :href="`https://github.com/${repository.project}/${repository.name}`"
-          >{{ repository.name }}</a
-        >
+        <a class="link" :href="`https://github.com/${repository.project}/${repository.name}`">{{ repository.name }}</a>
       </h3>
     </div>
     <div v-if="issues.length !== 0 && repository">
       <DataTable :value="issues" showGridlines>
         <Column field="name" header="Name">
           <template #body="slotProps">
-            <a
-              class="link"
-              :href="`https://github.com/${repository.project}/${repository.name}/issues/${slotProps.data.issue}`"
-            >
+            <a class="link"
+              :href="`https://github.com/${repository.project}/${repository.name}/issues/${slotProps.data.issue}`">
               #{{ slotProps.data.issue }}
             </a>
           </template>
@@ -70,26 +64,10 @@ store
           </template>
         </Column>
       </DataTable>
-      <Paginator
-        :rows="perPage"
-        :totalRecords="lastPage"
-        :page="page"
-        @page="changePage"
-      ></Paginator>
+      <Paginator :rows="perPage" :totalRecords="lastPage" :page="page" @page="changePage"></Paginator>
+    </div>
+    <div v-else class="spinner">
+      <ProgressSpinner />
     </div>
   </div>
 </template>
-<style scoped>
-.p-paginator-page,
-.p-paginator-prev,
-.p-paginator-next,
-.p-paginator-last,
-.p-paginator-first {
-  font-size: larger;
-  color: var(--vt-c-text-dark-2);
-}
-
-.p-paginator-page {
-  margin: 0.5rem;
-}
-</style>

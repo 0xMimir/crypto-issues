@@ -6,4 +6,4 @@ export interface CryptoCurrencyView{
     github: string,
     repositories: string[],
     issues: number
-};
+}

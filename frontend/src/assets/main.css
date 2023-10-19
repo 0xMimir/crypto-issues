@@ -1,0 +1,19 @@
+.spinner {
+    align-items: center;
+    display: flex;
+}
+
+.link,
+.link :visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.p-paginator-page,
+.p-paginator-prev,
+.p-paginator-next,
+.p-paginator-last,
+.p-paginator-first {
+    font-size: larger;
+    color: var(--vt-c-text-dark-2);
+}

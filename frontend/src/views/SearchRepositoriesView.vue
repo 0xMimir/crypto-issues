@@ -93,6 +93,9 @@ watch([perPage, page, archived, fork, language], search);
         </DataTable>
         <Paginator :rows="perPage" :totalRecords="totalRecords" :page="page" @page="changePage"></Paginator>
     </div>
+    <div v-else class="spinner">
+        <ProgressSpinner />
+    </div>
 </template>
 <style scoped>
 .dropdown {
