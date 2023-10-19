@@ -6,6 +6,7 @@ import { client } from "./axios";
 import type { Issue } from "@/types/issues";
 import type { RepositoryView } from "@/types/repositoryView";
 import type { LanguageCount } from "@/types/languageCount";
+import type { SearchRepository, SearchRepositoryParams } from "@/types/searchRepository";
 
 export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
   actions: {
@@ -45,6 +46,13 @@ export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
     async getLanguageCounts(): Promise<LanguageCount[]> {
       const response = await client.get('/api/v1/statistics/languages-count');
       return response.data;
+    },
+
+    async searchRepositories(params: SearchRepositoryParams): Promise<Pagination<SearchRepository>> {
+      const response = await client.get('/api/v1/repository/search', {
+        params: params
+      });
+      return response.data
     }
   },
 });

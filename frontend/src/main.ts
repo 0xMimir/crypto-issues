@@ -14,6 +14,7 @@ import DataTable from 'primevue/datatable';
 import Paginator from 'primevue/paginator';
 import TabMenu from 'primevue/tabmenu';
 import Chart from 'primevue/chart';
+import Dropdown from 'primevue/dropdown';
 
 const app = createApp(App)
 const pinia =  createPinia();
@@ -27,5 +28,6 @@ app.component("DataTable", DataTable)
 app.component("Paginator", Paginator)
 app.component("TabMenu", TabMenu)
 app.component("Chart", Chart)
+app.component("Dropdown", Dropdown)
 
 app.mount('#app')

@@ -18,7 +18,7 @@ const store = useCryptocurrenciesStore();
 function loadData() {
   store.getIssues(repositoryId, page.value, perPage.value).then((response) => {
     issues.value = response.data;
-    lastPage.value = response.lastPage + 1;
+    lastPage.value = response.totalItems;
   });
 }
 

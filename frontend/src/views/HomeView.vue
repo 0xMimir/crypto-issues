@@ -12,7 +12,7 @@ const store = useCryptocurrenciesStore();
 function loadData() {
   store.getCryptocurrencies(page.value, perPage.value).then((response) => {
     cryptoCurrencies.value = response.data;
-    lastPage.value = response.lastPage + 1;
+    lastPage.value = response.totalItems + 1;
   });
 }
 
@@ -24,7 +24,7 @@ function changePage(pageState: { page: number; }) {
 loadData();
 </script>
 <template>
-  <div v-if="cryptoCurrencies.length !== 0">
+  <div>
     <h1>Cryptocurrencies: </h1>
     <DataTable :value="cryptoCurrencies" showGridlines>
       <Column field="name" header="Name">
