@@ -7,6 +7,7 @@ import type { Issue } from "@/types/issues";
 import type { RepositoryView } from "@/types/repositoryView";
 import type { LanguageCount } from "@/types/languageCount";
 import type { SearchRepository, SearchRepositoryParams } from "@/types/searchRepository";
+import type { SearchGithubProject, SearchGithubProjectParams } from "@/types/searchGithubProject";
 
 export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
 	actions: {
@@ -51,6 +52,19 @@ export const useCryptocurrenciesStore = defineStore("cryptocurrencies", {
 		async searchRepositories(params: SearchRepositoryParams): Promise<Pagination<SearchRepository>> {
 			const response = await client.get("/api/v1/repository/search", {
 				params: params
+			});
+			return response.data;
+		},
+
+		async searchProjects(params: SearchGithubProjectParams): Promise<Pagination<SearchGithubProject>> {
+			const response = await client.get("/api/v1/projects", {
+				params: {
+					languagesUsed: params.languagesUsed?.reduce((a,b) => `${a},${b}`),
+					page: params.page,
+					perPage: params.perPage,
+					order: params.order,
+					orderBy: params.orderBy
+				} as SearchGithubProjectParams,
 			});
 			return response.data;
 		}

@@ -68,7 +68,6 @@ watch([perPage, page, archived, fork, language], search);
         </div>
         <br>
         <div v-if="repositories.length">
-
             <DataTable :value="repositories" showGridlines>
                 <Column field="repositoryName" header="Name">
                     <template #body="slotProps">

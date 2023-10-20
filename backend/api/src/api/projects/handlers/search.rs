@@ -20,7 +20,7 @@ pub async fn get_search<S: ProjectsContract>(
     service: Data<S>,
     params: Query<SearchGithubProjectParams>,
 ) -> Result<HttpResponse> {
-    let params = params.into_inner().into();
+    let params = params.into_inner();
     let value = service.search(params).await?;
     Ok(HttpResponse::Ok().json(value))
 }

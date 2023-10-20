@@ -16,6 +16,7 @@ import TabMenu from "primevue/tabmenu";
 import Chart from "primevue/chart";
 import Dropdown from "primevue/dropdown";
 import ProgressSpinner from "primevue/progressspinner";
+import MultiSelect from "primevue/multiselect";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -31,5 +32,6 @@ app.component("TabMenu", TabMenu);
 app.component("Chart", Chart);
 app.component("Dropdown", Dropdown);
 app.component("ProgressSpinner", ProgressSpinner);
+app.component("MultiSelect", MultiSelect);
 
 app.mount("#app");

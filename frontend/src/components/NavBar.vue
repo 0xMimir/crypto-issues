@@ -18,6 +18,10 @@ const items = ref([
   {
     label: 'Repositories',
     route: "/repository"
+  },
+  {
+    label: "Projects",
+    route: "/projects"
   }
 ]);
 
