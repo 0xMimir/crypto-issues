@@ -61,12 +61,21 @@ watch([page, perPage, languages], search);
         <br />
         <div v-if="projects.length">
             <DataTable :value="projects">
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name">
+                    <template #body="slotProps">
+                        <a class="link" :href="`https://github.com/${slotProps.data.name}`" rel="noopener">{{
+                            slotProps.data.name
+                        }}</a>
+                    </template>
+                </Column>
                 <Column field="languagesUsed" header="Languages Used"></Column>
                 <Column field="repositories" header="Repositories"></Column>
                 <Column field="issues" header="Total Issues"></Column>
             </DataTable>
             <Paginator :rows="perPage" :totalRecords="totalRecords" :page="page" @page="changePage"></Paginator>
+        </div>
+        <div v-else class="spinner">
+            <ProgressSpinner />
         </div>
     </div>
 </template>

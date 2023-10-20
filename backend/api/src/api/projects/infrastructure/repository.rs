@@ -30,7 +30,13 @@ impl DbRepositoryContract for PgRepository {
             .select_only()
             .columns([github_projects::Column::Id, github_projects::Column::Name])
             .inner_join(github_repositories::Entity)
-            .column_as(github_repositories::Column::Id.count(), "repositories")
+            .column_as(
+                Expr::cust_with_expr(
+                    r#"count(distinct $1)"#,
+                    github_repositories::Column::Id.into_simple_expr(),
+                ),
+                "repositories",
+            )
             .column_as(
                 Expr::cust_with_expr(
                     r#"coalesce(array_agg(distinct $1) filter(where $1 notnull), '{}')"#,
