@@ -1,7 +1,8 @@
 use error::Result;
 use sea_orm::{
-    sea_query::Expr, ColumnTrait, DatabaseConnection, EntityTrait, IntoSimpleExpr, JoinType,
-    PaginatorTrait, QueryOrder, QuerySelect, RelationTrait,
+    sea_query::{extension::postgres::PgExpr, Expr},
+    ColumnTrait, DatabaseConnection, EntityTrait, IntoSimpleExpr, JoinType, PaginatorTrait,
+    QueryOrder, QuerySelect, RelationTrait,
 };
 use std::sync::Arc;
 use store::{github_projects, github_repositories, issues, objects::SearchGithubProject};
@@ -25,7 +26,7 @@ impl DbRepositoryContract for PgRepository {
         &self,
         params: SearchGithubProjectParams,
     ) -> Result<Pagination<SearchGithubProject>> {
-        let query = github_projects::Entity::find()
+        let mut query = github_projects::Entity::find()
             .select_only()
             .columns([github_projects::Column::Id, github_projects::Column::Name])
             .inner_join(github_repositories::Entity)
@@ -43,6 +44,18 @@ impl DbRepositoryContract for PgRepository {
             )
             .column_as(issues::Column::Id.count(), "issues")
             .group_by(github_projects::Column::Id);
+
+        if let Some(languages) = params.languages_used {
+            if !languages.is_empty() {
+                query = query.having(
+                    Expr::cust_with_expr(
+                        r#"coalesce(array_agg(distinct $1) filter(where $1 notnull), '{}')::text[]"#,
+                        github_repositories::Column::Language.into_simple_expr(),
+                    )
+                    .contains(languages),
+                );
+            }
+        }
 
         let order_by = params.order_by.unwrap_or("issues".to_owned());
         let order = params.order.unwrap_or(support::order::Order::Desc);

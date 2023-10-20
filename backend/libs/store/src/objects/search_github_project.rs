@@ -1,6 +1,7 @@
 use sea_orm::{prelude::Uuid, FromQueryResult};
 
 #[derive(Deserialize, Serialize, ToSchema, FromQueryResult)]
+#[serde(rename_all = "camelCase")]
 pub struct SearchGithubProject {
     pub id: Uuid,
     pub name: String,

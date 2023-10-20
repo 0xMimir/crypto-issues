@@ -1,2 +1,2 @@
 mod search;
-pub use search::{SearchGithubProjectParams, SearchGithubProjectParamsPayload};
+pub use search::SearchGithubProjectParams;
