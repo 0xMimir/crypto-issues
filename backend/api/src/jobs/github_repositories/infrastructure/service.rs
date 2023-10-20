@@ -40,7 +40,7 @@ impl DbServiceContract for PgService {
                 created_at: Set(repository.created_at),
                 updated_at: Set(repository.updated_at),
                 archived: Set(repository.archived),
-                fork: Set(repository.fork)
+                fork: Set(repository.fork),
             })
             .collect::<Vec<_>>();
 
@@ -52,7 +52,7 @@ impl DbServiceContract for PgService {
             Column::Language,
             Column::UpdatedAt,
             Column::Archived,
-            Column::Fork
+            Column::Fork,
         ]);
 
         Entity::insert_many(models)

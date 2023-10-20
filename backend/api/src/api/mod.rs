@@ -9,9 +9,9 @@ use self::kenobi::hello_there;
 mod cryptocurrencies;
 mod kenobi;
 mod openapi;
+mod projects;
 mod repository;
 mod statistics;
-mod projects;
 
 pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
     let workers = match config::get_default("IS_DEV", "false").as_str() == "true" {
@@ -36,6 +36,7 @@ fn configure_routes(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
     openapi::OpenApiDocsFactory::configure_routes(config);
     cryptocurrencies::setup(conn.clone(), config);
     repository::setup(conn.clone(), config);
+    projects::setup(conn.clone(), config);
     statistics::setup(conn, config);
 
     config.service(hello_there);

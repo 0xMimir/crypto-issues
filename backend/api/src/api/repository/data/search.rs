@@ -14,5 +14,5 @@ pub struct SearchRepositoryParams {
     pub project_id: Option<Uuid>,
     pub project: Option<String>,
     pub archived: Option<bool>,
-    pub fork: Option<bool>
+    pub fork: Option<bool>,
 }

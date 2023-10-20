@@ -106,7 +106,7 @@ impl DbRepositoryContract for PgRepository {
             .await?
             .ok_or(Error::NotFoundWithCause(format!(
                 "Github not found, id:{}",
-                github_id.to_string()
+                github_id
             )))?;
 
         let repositories = github_repositories::Entity::find()

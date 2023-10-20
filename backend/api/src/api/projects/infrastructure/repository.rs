@@ -41,7 +41,8 @@ impl DbRepositoryContract for PgRepository {
                 JoinType::LeftJoin,
                 issues::Relation::GithubRepositories.def(),
             )
-            .column_as(issues::Column::Id.count(), "issues");
+            .column_as(issues::Column::Id.count(), "issues")
+            .group_by(github_projects::Column::Id);
 
         let order_by = params.order_by.unwrap_or("issues".to_owned());
         let order = params.order.unwrap_or(support::order::Order::Desc);

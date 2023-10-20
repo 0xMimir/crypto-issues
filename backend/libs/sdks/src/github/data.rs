@@ -13,7 +13,7 @@ pub struct GithubRepository {
     #[serde(deserialize_with = "deserialize_datetime")]
     pub updated_at: NaiveDateTime,
     pub archived: bool,
-    pub fork: bool
+    pub fork: bool,
 }
 
 #[derive(Deserialize)]

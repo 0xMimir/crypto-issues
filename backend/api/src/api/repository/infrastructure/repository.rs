@@ -12,7 +12,7 @@ use store::{
 };
 use support::pagination::Pagination;
 
-use super::{
+use super::super::{
     contract::DbRepositoryContract,
     data::{GetIssuesParams, SearchRepositoryParams},
 };
@@ -104,7 +104,7 @@ impl DbRepositoryContract for PgRepository {
                 github_repositories::Column::CreatedAt,
                 github_repositories::Column::UpdatedAt,
                 github_repositories::Column::Archived,
-                github_repositories::Column::Fork
+                github_repositories::Column::Fork,
             ])
             .column_as(github_repositories::Column::Project, "project_id")
             .column_as(github_projects::Column::Name, "project")

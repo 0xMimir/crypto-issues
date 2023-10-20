@@ -3,14 +3,14 @@ use std::sync::Arc;
 use actix_web::web::{self, resource, Data, ServiceConfig};
 use sea_orm::DatabaseConnection;
 
-use self::{domain::Repository, handlers::*, repository::PgRepository};
+use self::{domain::Repository, handlers::*, infrastructure::PgRepository};
 
 mod contract;
 mod data;
 pub(super) mod docs;
 mod domain;
 mod handlers;
-mod repository;
+mod infrastructure;
 
 pub fn setup(conn: Arc<DatabaseConnection>, config: &mut ServiceConfig) {
     let state = Repository {

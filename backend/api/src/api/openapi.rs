@@ -24,6 +24,7 @@ impl OpenApiDocsFactory {
             super::cryptocurrencies::docs::CryptocurrenciesDocs::openapi(),
             super::repository::docs::RepositoryDocs::openapi(),
             super::statistics::docs::StatisticsDocs::openapi(),
+            super::projects::docs::ProjectsDocs::openapi(),
         ];
 
         for doc in docs {

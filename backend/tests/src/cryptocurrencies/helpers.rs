@@ -14,6 +14,6 @@ pub fn default_github_repo(id: Uuid) -> github_repositories::ActiveModel {
         created_at: Set(NaiveDateTime::default()),
         updated_at: Set(NaiveDateTime::default()),
         archived: Set(false),
-        fork: Set(false)
+        fork: Set(false),
     }
 }

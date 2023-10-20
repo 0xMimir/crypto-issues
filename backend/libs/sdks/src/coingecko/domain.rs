@@ -24,10 +24,9 @@ impl CoinGecko {
         let response = self.client.get(url).send().await?;
         let status = response.status();
 
-        match status {
-            StatusCode::NOT_FOUND => return Err(Error::NotFound),
-            _ => (),
-        };
+        if status == StatusCode::NOT_FOUND {
+            return Err(Error::NotFound);
+        }
 
         let response = response.text().await?;
 

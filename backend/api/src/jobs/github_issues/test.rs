@@ -57,7 +57,7 @@ async fn test_setup() {
         created_at: Set(NaiveDateTime::default()),
         updated_at: Set(NaiveDateTime::default()),
         archived: Set(false),
-        fork: Set(false)
+        fork: Set(false),
     };
 
     github_repositories::Entity::insert(model)

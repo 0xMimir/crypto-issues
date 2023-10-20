@@ -10,7 +10,6 @@ use support::logger::setup_logger;
 #[tokio::main]
 #[cfg(not(tarpaulin_include))]
 async fn main() {
-
     setup_logger();
     dotenv_init();
     let db_url = config::get("DATABASE_URL").unwrap();

@@ -22,7 +22,7 @@ impl DbRepositoryContract for PgRepository {
             .order_by(Column::Name, Order::Asc)
             .all(self.conn.as_ref())
             .await?;
-        
+
         Ok(projects)
     }
 }
