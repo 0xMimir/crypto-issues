@@ -1,8 +1,8 @@
 use error::Result;
 use sea_orm::{
-    sea_query::{extension::postgres::PgExpr, Expr},
-    ColumnTrait, DatabaseConnection, EntityTrait, IntoSimpleExpr, JoinType, PaginatorTrait,
-    QueryOrder, QuerySelect, RelationTrait,
+    sea_query::{extension::postgres::PgExpr, Alias, Expr, PostgresQueryBuilder, SeaRc},
+    ColumnTrait, DatabaseConnection, DbBackend, EntityTrait, IntoSimpleExpr, JoinType,
+    PaginatorTrait, QueryOrder, QuerySelect, QueryTrait, Statement,
 };
 use std::sync::Arc;
 use store::{github_projects, github_repositories, issues, objects::SearchGithubProject};
@@ -26,10 +26,13 @@ impl DbRepositoryContract for PgRepository {
         &self,
         params: SearchGithubProjectParams,
     ) -> Result<Pagination<SearchGithubProject>> {
+        let sub_select = github_repositories::Entity::find()
+            .left_join(issues::Entity)
+            .column_as(issues::Column::Id.count(), "issues")
+            .group_by(github_repositories::Column::Id)
+            .into_query();
+
         let mut query = github_projects::Entity::find()
-            .select_only()
-            .columns([github_projects::Column::Id, github_projects::Column::Name])
-            .inner_join(github_repositories::Entity)
             .column_as(
                 Expr::cust_with_expr(
                     r#"count(distinct $1)"#,
@@ -44,11 +47,14 @@ impl DbRepositoryContract for PgRepository {
                 ),
                 "languages_used",
             )
-            .join_rev(
-                JoinType::LeftJoin,
-                issues::Relation::GithubRepositories.def(),
+            .column_as(
+                Expr::cust(r#"sum("github_repositories"."issues")::bigint"#),
+                "issues",
             )
-            .column_as(issues::Column::Id.count(), "issues")
+            .column_as(
+                Expr::cust(r#"sum("github_repositories"."stargazers_count")::bigint"#),
+                "stargazers_count",
+            )
             .group_by(github_projects::Column::Id);
 
         if let Some(languages) = params.languages_used {
@@ -70,6 +76,26 @@ impl DbRepositoryContract for PgRepository {
 
         let query = query
             .order_by(Expr::cust(order_by), order.into())
+            .into_query()
+            .join_subquery(
+                JoinType::InnerJoin,
+                sub_select,
+                SeaRc::new(Alias::new("github_repositories")),
+                github_repositories::Column::Project
+                    .into_expr()
+                    .eq(github_projects::Column::Id.into_expr()),
+            )
+            .to_owned();
+
+        let (sql, values) = query.build(PostgresQueryBuilder::default());
+
+        let query = github_projects::Entity::find().from_raw_sql(Statement::from_sql_and_values(
+            DbBackend::Postgres,
+            sql,
+            values,
+        ));
+
+        let query = query
             .into_model::<SearchGithubProject>()
             .paginate(self.conn.as_ref(), per_page);
 

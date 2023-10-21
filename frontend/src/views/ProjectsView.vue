@@ -21,7 +21,7 @@ function search() {
         languagesUsed: undefined
     } as SearchGithubProjectParams;
 
-    if (languages.value) {
+    if (languages.value && languages.value.length) {
         params.languagesUsed = languages.value.map(language => language.name);
     }
 
@@ -45,6 +45,10 @@ onMounted(() => {
     search()
 });
 
+function changeLanguages() {
+    page.value = 0;
+}
+
 
 watch([page, perPage, languages], search);
 
@@ -55,8 +59,8 @@ watch([page, perPage, languages], search);
             Projects
         </h1>
         <div>
-            <MultiSelect v-model="languages" :options="allLanguages" optionLabel="name" placeholder="Select Languages"
-                filter :showToggleAll="false" display="chip" />
+            <MultiSelect v-model="languages" v-on:update:model-value="changeLanguages" :options="allLanguages"
+                optionLabel="name" placeholder="Select Languages" filter :showToggleAll="false" display="chip" />
         </div>
         <br />
         <div v-if="projects.length">
@@ -68,9 +72,18 @@ watch([page, perPage, languages], search);
                         }}</a>
                     </template>
                 </Column>
-                <Column field="languagesUsed" header="Languages Used"></Column>
+                <Column field="languagesUsed" header="Languages Used">
+                    <template #body="slotProps">
+                        {{ 
+                            slotProps.data.languagesUsed.length 
+                                ? slotProps.data.languagesUsed?.reduce((a: string, b: string) => `${a}, ${b}`)
+                                : "Unknown"
+                        }}
+                    </template>
+                </Column>
                 <Column field="repositories" header="Repositories"></Column>
                 <Column field="issues" header="Total Issues"></Column>
+                <Column field="stargazersCount" header="Stargazers Count"></Column>
             </DataTable>
             <Paginator :rows="perPage" :totalRecords="totalRecords" :page="page" @page="changePage"></Paginator>
         </div>

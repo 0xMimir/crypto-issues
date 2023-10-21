@@ -4,6 +4,7 @@ export interface SearchGithubProject {
     repositories: number;
     languagesUsed: string[];
     issues: number;
+    stargazersCount: number;
 }
 
 export interface SearchGithubProjectParams {

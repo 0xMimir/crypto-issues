@@ -57,7 +57,6 @@ impl<
     ///
     async fn update_info(&self) -> Result<()> {
         let mut cryptocurrencies = self.repository.get_assets_without_info().await?;
-
         let mut github_ids = self.repository.get_projects().await?;
 
         while let Some((id, coingecko_id)) = cryptocurrencies.last() {

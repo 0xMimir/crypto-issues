@@ -17,3 +17,15 @@
     font-size: larger;
     color: var(--vt-c-text-dark-2);
 }
+
+body {
+    /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+}
