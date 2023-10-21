@@ -87,7 +87,7 @@ impl DbRepositoryContract for PgRepository {
             )
             .to_owned();
 
-        let (sql, values) = query.build(PostgresQueryBuilder::default());
+        let (sql, values) = query.build(PostgresQueryBuilder);
 
         let query = github_projects::Entity::find().from_raw_sql(Statement::from_sql_and_values(
             DbBackend::Postgres,

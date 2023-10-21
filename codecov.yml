@@ -6,3 +6,16 @@ coverage:
     patch:
       default:
         informational: true
+
+flag_management:
+  default_rules: # the rules that will be followed for any flag added, generally
+    carryforward: true
+  individual_flags:
+    - name: backend
+      paths: 
+      - backend/
+      carryforward: true
+    - name: frontend
+      paths: 
+      - frontend/
+      carryforward: true
