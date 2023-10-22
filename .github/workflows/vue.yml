@@ -3,7 +3,7 @@ name: Vue
 on:
   push:
     paths:
-      - "backend/**"
+      - "frontend/**"
     
 env:
   CARGO_TERM_COLOR: always

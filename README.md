@@ -1,6 +1,8 @@
 # Crypto Issues
 
-[![codecov](https://codecov.io/gh/0xMimir/crypto-issues/graph/badge.svg?token=FZbBRHxsZ9)](https://codecov.io/gh/0xMimir/crypto-issues)
+Backend [![codecov](https://codecov.io/github/0xMimir/crypto-issues/graph/badge.svg?token=FZbBRHxsZ9&flag=backend)](https://codecov.io/github/0xMimir/crypto-issues)
+
+Frontend [![codecov](https://codecov.io/github/0xMimir/crypto-issues/graph/badge.svg?token=FZbBRHxsZ9&flag=frontend)](https://codecov.io/github/0xMimir/crypto-issues)
 
 Scan crypto currency repositories for open issues.
 
