@@ -10,7 +10,7 @@ pub fn default_github_repo(id: Uuid) -> github_repositories::ActiveModel {
         stargazers_count: Set(0),
         forks_count: Set(0),
         id: Default::default(),
-        language: Set(None),
+        language: Set(Some("Rust".to_owned())),
         created_at: Set(NaiveDateTime::default()),
         updated_at: Set(NaiveDateTime::default()),
         archived: Set(false),

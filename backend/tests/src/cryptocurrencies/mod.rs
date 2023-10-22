@@ -16,14 +16,17 @@ lazy_static! {
     pub static ref GITHUB_ID: Uuid = Uuid::new_v4();
 }
 
+const PORT: u16 = 1112;
+
 #[adtest::adtest(
     setup = async test_setup,
     cleanup = async test_cleanup
 )]
-async fn cryptocurrency_route() {
+#[serial_test::serial]
+async fn cryptocurrency() {
     let sea_pool = _setup_;
 
-    run_e2e_api_tests(sea_pool, test_routes).await;
+    run_e2e_api_tests(sea_pool, PORT, test_routes).await;
 }
 
 async fn test_setup() -> Arc<DatabaseConnection> {

@@ -1,3 +1,4 @@
+use super::PORT;
 use crate::request::request;
 use reqwest::Method;
 use store::objects::CryptoCurrencyView;
@@ -10,14 +11,19 @@ const ROUTE: &str = "/api/v1/crypto";
 ///
 pub async fn api_v1_crypto() {
     let response: Pagination<CryptoCurrencyView> =
-        request(ROUTE, Method::GET, (), ()).await.unwrap();
+        request(ROUTE, PORT, Method::GET, (), ()).await.unwrap();
 
     assert!(!response.data.is_empty());
 
-    let response: Pagination<CryptoCurrencyView> =
-        request(ROUTE, Method::GET, [("search", "oooooogggggaaaaa")], ())
-            .await
-            .unwrap();
+    let response: Pagination<CryptoCurrencyView> = request(
+        ROUTE,
+        PORT,
+        Method::GET,
+        [("search", "oooooogggggaaaaa")],
+        (),
+    )
+    .await
+    .unwrap();
 
     assert!(response.data.is_empty());
 }

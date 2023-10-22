@@ -13,7 +13,7 @@ mod projects;
 mod repository;
 mod statistics;
 
-pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
+pub fn create_api(conn: Arc<DatabaseConnection>, port: u16) -> Server {
     let workers = match config::get_default("IS_DEV", "false").as_str() == "true" {
         true => 1,
         false => config::get_default("ACTIX_WORKERS", "8")
@@ -27,7 +27,7 @@ pub fn create_api(conn: Arc<DatabaseConnection>) -> Server {
             .configure(|config| configure_routes(conn.clone(), config))
     })
     .workers(workers)
-    .bind(("0.0.0.0", 1111))
+    .bind(("0.0.0.0", port))
     .expect("Unable to start sever")
     .run()
 }

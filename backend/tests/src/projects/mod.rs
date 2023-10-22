@@ -8,8 +8,6 @@ use uuid::Uuid;
 
 use crate::{e2e_api::run_e2e_api_tests, helpers::default_github_repo};
 
-mod get_id;
-mod get_issues;
 mod search;
 
 lazy_static! {
@@ -23,7 +21,7 @@ const PORT: u16 = 1113;
     cleanup = async test_cleanup
 )]
 #[serial_test::serial]
-async fn repository() {
+async fn projects() {
     let (sea_pool, _) = _setup_;
 
     run_e2e_api_tests(sea_pool, PORT, test_routes).await;
@@ -83,7 +81,5 @@ async fn test_cleanup() {
 }
 
 async fn test_routes() {
-    let repository = search::search().await;
-    get_id::get_id(repository.id).await;
-    get_issues::get_issues(repository.id).await;
+    search::api_v1_projects().await
 }

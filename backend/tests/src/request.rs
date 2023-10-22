@@ -2,7 +2,7 @@ use error::{Error, Result};
 use reqwest::{Client, Method};
 use serde::{de::DeserializeOwned, Serialize};
 
-pub async fn request<U, P, B, R>(url: U, method: Method, query: P, body: B) -> Result<R>
+pub async fn request<U, P, B, R>(url: U, port: u16, method: Method, query: P, body: B) -> Result<R>
 where
     U: Into<String>,
     B: Serialize,
@@ -10,7 +10,7 @@ where
     R: DeserializeOwned + 'static,
 {
     let client = Client::default();
-    let url = format!("http://localhost:1111{}", url.into());
+    let url = format!("http://localhost:{}{}", port, url.into());
     let request = client
         .request(method, url)
         .query(&query)

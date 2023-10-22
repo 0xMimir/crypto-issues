@@ -2,12 +2,12 @@ use sea_orm::DatabaseConnection;
 use std::{future::Future, sync::Arc, time::Duration};
 use tokio::time::sleep;
 
-pub async fn run_e2e_api_tests<F, T>(sea_pool: Arc<DatabaseConnection>, test_function: F)
+pub async fn run_e2e_api_tests<F, T>(sea_pool: Arc<DatabaseConnection>, port: u16, test_function: F)
 where
     F: Fn() -> T,
     T: Future<Output = ()>,
 {
-    let routes = api::create_api(sea_pool);
+    let routes = api::create_api(sea_pool, port);
 
     let handle = tokio::spawn(async move { routes.await });
 

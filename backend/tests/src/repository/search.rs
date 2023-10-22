@@ -2,17 +2,19 @@ use reqwest::Method;
 use store::objects::SearchRepository;
 use support::pagination::PaginatedRepositories;
 
+use super::PORT;
 use crate::request::request;
 
 const ROUTE: &str = "/api/v1/repository/search";
 
 pub async fn search() -> SearchRepository {
-    let mut repositories: PaginatedRepositories = request(ROUTE, Method::GET, (), ())
+    let mut repositories: PaginatedRepositories = request(ROUTE, PORT, Method::GET, (), ())
         .await
         .expect("Error searching repositories");
 
     let response: PaginatedRepositories = request(
         ROUTE,
+        PORT,
         Method::GET,
         [
             ("language", "DREAM"),
@@ -20,7 +22,7 @@ pub async fn search() -> SearchRepository {
             ("projectId", "38ecb0bd-7bfe-4919-a6dd-15c948f0ac1f"),
             ("project", "lol"),
             ("fork", "true"),
-            ("archived", "true")
+            ("archived", "true"),
         ],
         (),
     )

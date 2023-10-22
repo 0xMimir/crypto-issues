@@ -12,7 +12,7 @@ use tokio::time::sleep;
 async fn test_route_setup() -> Result<()> {
     let sea_pool = create_db_pool().await;
 
-    let routes = api::create_api(sea_pool);
+    let routes = api::create_api(sea_pool, 1111);
 
     let handle = tokio::spawn(async move { routes.await });
 

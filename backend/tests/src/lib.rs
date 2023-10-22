@@ -5,4 +5,8 @@ pub mod request;
 #[cfg(test)]
 pub mod cryptocurrencies;
 #[cfg(test)]
+pub mod projects;
+#[cfg(test)]
 pub mod repository;
+#[cfg(test)]
+pub mod statistics;
