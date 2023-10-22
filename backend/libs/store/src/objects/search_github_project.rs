@@ -8,5 +8,5 @@ pub struct SearchGithubProject {
     pub repositories: i64,
     pub languages_used: Vec<String>,
     pub issues: i64,
-    pub stargazers_count: i64
+    pub stargazers_count: i64,
 }

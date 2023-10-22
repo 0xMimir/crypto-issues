@@ -16,7 +16,7 @@ lazy_static! {
     pub static ref GITHUB_UUID: Uuid = Uuid::new_v4();
 }
 
-const PORT: u16 = 1113;
+const PORT: u16 = 1115;
 
 #[adtest::adtest(
     setup = async test_setup,

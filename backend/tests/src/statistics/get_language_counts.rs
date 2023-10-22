@@ -17,6 +17,6 @@ pub async fn api_v1_statistics_languages_count() {
         .into_iter()
         .find(|lc| lc.language == "Rust")
         .unwrap();
-    
+
     assert_eq!(rust.count, 1);
 }

@@ -9,7 +9,7 @@ where
 {
     let routes = api::create_api(sea_pool, port);
 
-    let handle = tokio::spawn(async move { routes.await });
+    let handle = tokio::spawn(routes);
 
     sleep(Duration::from_secs(1)).await;
 

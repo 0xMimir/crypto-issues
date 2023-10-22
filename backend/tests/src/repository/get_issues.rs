@@ -2,7 +2,8 @@ use reqwest::Method;
 use support::pagination::PaginatedGithubIssue;
 use uuid::Uuid;
 
-use crate::{repository::PORT, request::request};
+use super::PORT;
+use crate::request::request;
 
 const ROUTE: &str = "/api/v1/repository/{id}/issues";
 

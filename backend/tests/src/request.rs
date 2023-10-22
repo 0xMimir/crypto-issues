@@ -17,7 +17,7 @@ where
         .json(&body)
         .send()
         .await?;
-    
+
     let response_body = request.text().await?;
     serde_json::from_str(&response_body).map_err(Error::from)
 }
