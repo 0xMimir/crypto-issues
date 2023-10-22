@@ -1,29 +1,21 @@
 use crate::request::request;
-use error::{ErrorResponse, Result};
+use error::ErrorResponse;
 use reqwest::Method;
-use sea_orm::{
-    prelude::Uuid, sea_query::OnConflict, DatabaseConnection, EntityTrait, ModelTrait, Set,
-};
-use store::{
-    cryptocurrencies, github_projects, github_repositories, objects::CryptoCurrencyWithRepositories,
-};
-
-use super::helpers::default_github_repo;
+use store::objects::CryptoCurrencyWithRepositories;
+use uuid::Uuid;
 
 ///
 /// Test function for /api/v1/crypto/{id}
 ///
-pub async fn api_v1_crypto_id(sea_pool: &DatabaseConnection) {
-    let (github, crypto) = setup(sea_pool).await.unwrap();
-
+pub async fn api_v1_crypto_id(id: Uuid) {
     let response: CryptoCurrencyWithRepositories =
-        request(format!("/api/v1/crypto/{}", crypto.id), Method::GET, ())
+        request(format!("/api/v1/crypto/{}", id), Method::GET, (), ())
             .await
             .unwrap();
 
     assert_eq!(response.repositories.len(), 1);
 
-    let response: ErrorResponse = request("/api/v1/crypto/not-a-uuid", Method::GET, ())
+    let response: ErrorResponse = request("/api/v1/crypto/not-a-uuid", Method::GET, (), ())
         .await
         .unwrap();
 
@@ -33,53 +25,10 @@ pub async fn api_v1_crypto_id(sea_pool: &DatabaseConnection) {
         "/api/v1/crypto/aac5a965-e14a-472b-a0e4-66bf6f65d39f",
         Method::GET,
         (),
+        (),
     )
     .await
     .unwrap();
 
     assert_eq!(response.status, 404);
-
-    github.delete(sea_pool).await.unwrap();
-    crypto.delete(sea_pool).await.unwrap();
-}
-
-async fn setup(
-    sea_pool: &DatabaseConnection,
-) -> Result<(github_projects::Model, cryptocurrencies::Model)> {
-    let github = github_projects::ActiveModel {
-        id: Set(Uuid::new_v4()),
-        name: Set("TestGit".to_owned()),
-    };
-
-    let github = github_projects::Entity::insert(github)
-        .on_conflict(
-            OnConflict::column(github_projects::Column::Name)
-                .do_nothing()
-                .to_owned(),
-        )
-        .exec_with_returning(sea_pool)
-        .await?;
-
-    let crypto = cryptocurrencies::ActiveModel {
-        id: Set(Uuid::new_v4()),
-        name: Set("Test coin 1000".to_owned()),
-        coingecko_id: Set("test-coin-at-coingecko".to_owned()),
-        github: Set(Some(github.id)),
-        gitlab: Default::default(),
-        description: Default::default(),
-    };
-
-    let crypto = cryptocurrencies::Entity::insert(crypto)
-        .on_conflict(OnConflict::default().do_nothing().to_owned())
-        .exec_with_returning(sea_pool)
-        .await?;
-
-    let github_repo = default_github_repo(github.id);
-
-    github_repositories::Entity::insert(github_repo)
-        .on_conflict(OnConflict::default().do_nothing().to_owned())
-        .exec(sea_pool)
-        .await?;
-
-    Ok((github, crypto))
 }
