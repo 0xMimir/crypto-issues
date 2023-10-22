@@ -4,6 +4,7 @@ use utoipa::IntoParams;
 use validify::Validify;
 
 #[derive(Validify, Deserialize, IntoParams, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct SearchRepositoryParams {
     pub order_by: Option<String>,
     pub order: Option<Order>,

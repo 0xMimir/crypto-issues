@@ -1,5 +1,8 @@
 pub mod cryptocurrencies;
-pub mod request;
-
 #[cfg(test)]
-mod e2e_api;
+pub mod repository;
+
+
+pub mod request;
+pub mod e2e_api;
+pub mod helpers;
