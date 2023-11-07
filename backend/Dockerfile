@@ -7,6 +7,10 @@ RUN cargo build --release
 
 FROM ubuntu:latest
 
+RUN apt update -y
+RUN apt install ca-certificates -y
+RUN update-ca-certificates -y
+
 RUN useradd -ms /bin/bash ubuntu
 USER ubuntu
 
