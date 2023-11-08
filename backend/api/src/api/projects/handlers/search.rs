@@ -1,8 +1,14 @@
-use actix_web::web::Query;
-use actix_web::{web::Data, HttpResponse};
+use actix_web::{
+    web::{Data, Query},
+    HttpResponse,
+};
 use error::Result;
+use validify::Validify;
 
-use super::super::{contract::ProjectsContract, data::SearchGithubProjectParams};
+use super::super::{
+    contract::ProjectsContract, data::SearchGithubProjectParams,
+    data::SearchGithubProjectParamsPayload,
+};
 
 #[utoipa::path(
     get,
@@ -18,9 +24,9 @@ use super::super::{contract::ProjectsContract, data::SearchGithubProjectParams};
 )]
 pub async fn get_search<S: ProjectsContract>(
     service: Data<S>,
-    params: Query<SearchGithubProjectParams>,
+    params: Query<SearchGithubProjectParamsPayload>,
 ) -> Result<HttpResponse> {
-    let params = params.into_inner();
+    let params = SearchGithubProjectParams::validify(params.into_inner())?;
     let value = service.search(params).await?;
     Ok(HttpResponse::Ok().json(value))
 }

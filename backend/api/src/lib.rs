@@ -7,6 +7,9 @@ extern crate async_trait;
 #[macro_use]
 extern crate serde;
 
+#[macro_use]
+extern crate validify;
+
 #[cfg(test)]
 #[macro_use]
 extern crate adtest;

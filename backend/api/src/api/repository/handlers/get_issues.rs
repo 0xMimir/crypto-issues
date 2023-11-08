@@ -1,10 +1,12 @@
+use crate::api::repository::data::GetIssuesParams;
+
 use super::super::{contract::RepositoryContract, data::GetIssuesParamsPayload};
 use actix_web::{
     web::{Data, Path, Query},
     HttpResponse,
 };
 use error::Result;
-use validify::Validate;
+use validify::Validify;
 
 #[utoipa::path(
     get,
@@ -26,8 +28,7 @@ pub async fn get_issues<S: RepositoryContract>(
     query: Query<GetIssuesParamsPayload>,
 ) -> Result<HttpResponse> {
     let repository_id = path.into_inner().1.parse()?;
-    query.validate()?;
-    let query = query.into_inner().into();
+    let query = GetIssuesParams::validify(query.into_inner())?;
 
     let value = service
         .get_issues_for_repository(repository_id, query)
