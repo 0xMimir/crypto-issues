@@ -38,7 +38,7 @@ impl Error {
     /// Fix this
     fn get_message_and_cause(&self) -> (Value, Option<String>) {
         let message = match self {
-            Self::Validation(error) => serde_json::to_value(&error).expect("Bedja pusi k"),
+            Self::Validation(error) => serde_json::to_value(error).expect("Bedja pusi k"),
             _ => Value::String(self.to_string()),
         };
         let cause = None;
