@@ -1,4 +1,7 @@
-use sea_orm::{prelude::Uuid, sea_query::OnConflict, ColumnTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{
+    prelude::Uuid, sea_query::OnConflict, ActiveValue::NotSet, ColumnTrait, EntityTrait,
+    QueryFilter, Set,
+};
 use store::{github_projects, github_repositories};
 use support::db_pool::create_db_pool;
 
@@ -41,6 +44,9 @@ async fn test_setup() {
     let model = github_projects::ActiveModel {
         name: Set("bitcoin".to_owned()),
         id: Set(*GITHUB_ID),
+        profile_type: NotSet,
+        url: NotSet,
+        followers: Set(0),
     };
 
     github_projects::Entity::insert(model)

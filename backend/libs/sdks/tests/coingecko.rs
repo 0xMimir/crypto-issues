@@ -5,7 +5,13 @@ use sdks::coingecko::{CoinGecko, CoinGeckoContract};
 async fn test_list() -> Result<()> {
     let coingecko = CoinGecko::default();
 
-    let all_projects = coingecko.list_cryptocurrencies().await?;
+    let all_projects = match coingecko.list_cryptocurrencies().await {
+        Ok(r) => r,
+        Err(e) => match e {
+            Error::RateLimitExceeded => return Ok(()),
+            e => return Err(e),
+        },
+    };
 
     assert!(all_projects.len() > 100);
 
@@ -21,13 +27,25 @@ async fn test_list() -> Result<()> {
 async fn test_info() -> Result<()> {
     let coingecko = CoinGecko::default();
 
-    let info = coingecko.get_info("bitcoin").await?;
+    let info = match coingecko.get_info("bitcoin").await {
+        Ok(r) => r,
+        Err(e) => match e {
+            Error::RateLimitExceeded => return Ok(()),
+            e => return Err(e),
+        },
+    };
     assert!(!info.all_none());
     assert_eq!(info.github.unwrap(), "bitcoin");
 
-    let error = coingecko.get_info("shit-coin-must-not-exist-402-20").await;
+    let error = match coingecko.get_info("shit-coin-must-not-exist-402-20").await {
+        Ok(_) => panic!("This crypto should not exists"),
+        Err(e) => match e {
+            Error::RateLimitExceeded => return Ok(()),
+            e => e,
+        },
+    };
 
-    assert!(matches!(error, Err(Error::NotFoundWithCause(_))));
+    assert!(matches!(error, Error::NotFoundWithCause(_)));
 
     Ok(())
 }

@@ -4,6 +4,7 @@ pub mod infrastructure;
 #[cfg(test)]
 mod test;
 
+use cronus::Cronus;
 pub use domain::GithubRepositoriesCron;
 use infrastructure::{PgRepository, PgService};
 use sdks::github::Github;
@@ -13,9 +14,9 @@ use std::sync::Arc;
 ///
 /// Create and spawn github repositories job
 ///
-pub fn setup(sea_pool: Arc<DatabaseConnection>) -> tokio::task::JoinHandle<()> {
-    let cron = create_gr(sea_pool);
-    cron.spawn_cron()
+pub fn setup(cron: &Cronus, sea_pool: Arc<DatabaseConnection>) {
+    let job = create_gr(sea_pool);
+    cron.add(job).expect("Error adding job");
 }
 
 ///

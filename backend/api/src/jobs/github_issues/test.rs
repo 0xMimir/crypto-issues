@@ -1,5 +1,5 @@
 use chrono::NaiveDateTime;
-use sea_orm::{prelude::Uuid, sea_query::OnConflict, EntityTrait, Set};
+use sea_orm::{prelude::Uuid, sea_query::OnConflict, ActiveValue::NotSet, EntityTrait, Set};
 use store::{github_projects, github_repositories, issues};
 use support::{count::count, db_pool::create_db_pool};
 
@@ -35,6 +35,9 @@ async fn test_setup() {
     let model = github_projects::ActiveModel {
         name: Set("bitcoin".to_owned()),
         id: Set(*GITHUB_ID),
+        profile_type: NotSet,
+        url: NotSet,
+        followers: Set(0),
     };
 
     let model = github_projects::Entity::insert(model)

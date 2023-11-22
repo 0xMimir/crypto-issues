@@ -1,13 +1,8 @@
-use std::time::{Duration, Instant};
-
 use super::contract::{DbRepositoryContract, DbServiceContract};
+use cronus::{Job, Schedule};
 use error::{Error, Result};
 use sdks::github::GithubContract;
 use store::github_projects::Model;
-use tokio::{
-    task::JoinHandle,
-    time::{interval_at, sleep},
-};
 
 pub struct GithubRepositoriesCron<
     Repository: DbRepositoryContract,
@@ -67,8 +62,15 @@ impl<
                 Ok(repos) => repos,
                 Err(Error::RateLimitExceeded) => {
                     warn!("Rate limit exceeded sleeping for 10 minutes");
-                    sleep(Duration::from_secs(6000)).await;
-                    continue;
+
+                    #[cfg(test)]
+                    panic!("Rate Limit Exceeded");
+
+                    #[cfg(not(test))]
+                    {
+                        tokio::time::sleep(std::time::Duration::from_secs(6000)).await;
+                        continue;
+                    }
                 }
                 Err(error) => return Err(error),
             };
@@ -86,25 +88,21 @@ impl<
 
         Ok(())
     }
+}
 
-    ///
-    /// Spawns tokio task, that waits for a day, then runs once a week
-    ///
-    pub fn spawn_cron(self) -> JoinHandle<()> {
-        info!("Spawning github repositories task");
-
-        tokio::spawn(async move {
-            let mut interval = interval_at(
-                (Instant::now() + Duration::from_secs(86_400)).into(),
-                Duration::from_secs(86_400 * 7),
-            );
-
-            loop {
-                interval.tick().await;
-                if let Err(error) = self.cron_job().await {
-                    error!("{}", error);
-                }
-            }
-        })
+#[async_trait]
+impl<Repository, Service, Github> Job for GithubRepositoriesCron<Repository, Service, Github>
+where
+    Repository: DbRepositoryContract + Send + Sync + 'static,
+    Service: DbServiceContract + Send + Sync + 'static,
+    Github: GithubContract + Send + Sync + 'static,
+{
+    fn schedule(&self) -> Schedule {
+        "0 0 0 * * Mon".parse().expect("Invalid schedule")
+    }
+    async fn job(&self) {
+        if let Err(error) = self.cron_job().await {
+            error!("{}", error);
+        }
     }
 }

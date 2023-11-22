@@ -1,6 +1,9 @@
 create table github_projects(
     id uuid primary key default uuid_generate_v4() not null,
-    name varchar(255) not null unique
+    name varchar(255) not null unique,
+    profile_type varchar(20),
+    url text,
+    followers bigint not null default 0
 );
 
 create table cryptocurrencies(

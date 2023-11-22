@@ -14,9 +14,12 @@ async fn main() {
     let pool = Database::connect(db_url).await.unwrap();
     let sea_pool = Arc::new(pool);
 
-    if config::get_default("RUN_JOBS", "true") == "true" {
-        let _handles = setup_jobs(sea_pool.clone());
-    }
+    let _cron = if config::get_default("RUN_JOBS", "true") == "true" {
+        let _handle = setup_jobs(sea_pool.clone());
+        Some(_handle)
+    } else {
+        None
+    };
 
     create_api(sea_pool, 1111)
         .await

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use lazy_static::lazy_static;
-use sea_orm::{sea_query::OnConflict, DatabaseConnection, EntityTrait, Set};
+use sea_orm::{sea_query::OnConflict, ActiveValue::NotSet, DatabaseConnection, EntityTrait, Set};
 use store::{cryptocurrencies, github_projects, github_repositories};
 use support::db_pool::create_db_pool;
 use uuid::Uuid;
@@ -35,6 +35,9 @@ async fn test_setup() -> Arc<DatabaseConnection> {
     let github = github_projects::ActiveModel {
         id: Set(*GITHUB_ID),
         name: Set("TestGit".to_owned()),
+        url: NotSet,
+        profile_type: NotSet,
+        followers: NotSet,
     };
 
     let github = github_projects::Entity::insert(github)

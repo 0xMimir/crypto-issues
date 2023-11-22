@@ -1,11 +1,9 @@
 use super::contract::{DbRepositoryContract, DbServiceContract};
+use cronus::{Job, Schedule};
 use error::{Error, Result};
 use sdks::coingecko::CoinGeckoContract;
-use std::time::{Duration, Instant};
-use tokio::{
-    task::JoinHandle,
-    time::{interval_at, sleep},
-};
+use std::time::Duration;
+use tokio::time::sleep;
 
 pub struct Info<
     Repository: DbRepositoryContract,
@@ -96,22 +94,21 @@ impl<
         }
         Ok(())
     }
-    ///
-    /// Spawns tokio task, that waits for a day, then runs once a day
-    ///
-    pub fn spawn_cron(self) -> JoinHandle<()> {
-        tokio::spawn(async move {
-            let mut interval = interval_at(
-                (Instant::now() + Duration::from_secs(86_400)).into(),
-                Duration::from_secs(86_400),
-            );
+}
 
-            loop {
-                interval.tick().await;
-                if let Err(error) = self.preform_init().await {
-                    error!("{}", error);
-                }
-            }
-        })
+#[async_trait]
+impl<Repository, Service, CoinGecko> Job for Info<Repository, Service, CoinGecko>
+where
+    Repository: DbRepositoryContract + Send + Sync + 'static,
+    Service: DbServiceContract + Send + Sync + 'static,
+    CoinGecko: CoinGeckoContract + Send + Sync + 'static,
+{
+    fn schedule(&self) -> Schedule {
+        "0 0 0 * * * *".parse().expect("Invalid schedule")
+    }
+    async fn job(&self) {
+        if let Err(error) = self.preform_init().await {
+            error!("{}", error);
+        }
     }
 }

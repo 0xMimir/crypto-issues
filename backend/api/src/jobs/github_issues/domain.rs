@@ -1,13 +1,11 @@
+use cronus::{Job, Schedule};
 use error::{Error, Result};
 use sdks::github::GithubContract;
 use std::time::Duration;
 use store::{
     github_projects::Model as GithubProject, github_repositories::Model as GithubRepository,
 };
-use tokio::{
-    task::JoinHandle,
-    time::{interval, sleep},
-};
+use tokio::time::sleep;
 
 use super::contract::{DbRepositoryContract, DbServiceContract};
 
@@ -96,20 +94,21 @@ impl<
 
         Ok(())
     }
+}
 
-    ///
-    /// Spawns tokio task, that runs every 3 hours
-    ///
-    pub fn spawn_cron(self) -> JoinHandle<()> {
-        tokio::spawn(async move {
-            let mut interval = interval(Duration::from_secs(21600));
-
-            loop {
-                interval.tick().await;
-                if let Err(error) = self.cron_job().await {
-                    error!("{}", error);
-                }
-            }
-        })
+#[async_trait]
+impl<Repository, Service, Github> Job for GithubIssueCron<Repository, Service, Github>
+where
+    Repository: DbRepositoryContract + Send + Sync + 'static,
+    Service: DbServiceContract + Send + Sync + 'static,
+    Github: GithubContract + Send + Sync + 'static,
+{
+    fn schedule(&self) -> Schedule {
+        "0 0 0/6 * * * *".parse().expect("Invalid schedule")
+    }
+    async fn job(&self) {
+        if let Err(error) = self.cron_job().await {
+            error!("{}", error);
+        }
     }
 }
