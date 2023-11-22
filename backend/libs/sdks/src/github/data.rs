@@ -1,6 +1,7 @@
 use chrono::NaiveDateTime;
 use error::Error;
 use serde::{de::Error as DeError, Deserialize, Deserializer};
+use strum::{Display, EnumString};
 
 #[derive(Deserialize, Debug)]
 pub struct GithubRepository {
@@ -75,4 +76,19 @@ pub struct RateLimitResponse {
 pub struct RateLimit {
     pub remaining: u64,
     pub reset: i64,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ProfileInfo {
+    #[serde(rename = "type")]
+    pub profile_type: ProfileType,
+    pub followers: i64, // u64 but postgres doesn't support unsigned numbers,
+    #[serde(rename = "blog")]
+    pub site: Option<String>,
+}
+
+#[derive(Deserialize, Debug, Display, EnumString)]
+pub enum ProfileType {
+    User,
+    Organization,
 }

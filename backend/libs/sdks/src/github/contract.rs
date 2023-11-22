@@ -1,6 +1,6 @@
 use error::Result;
 
-use super::data::{GithubIssue, GithubRepository, RateLimit};
+use super::data::{GithubIssue, GithubRepository, RateLimit, ProfileInfo};
 
 #[async_trait]
 pub trait GithubContract {
@@ -23,4 +23,9 @@ pub trait GithubContract {
     /// Get rate limit
     ///
     async fn get_rate_limit(&self) -> Result<RateLimit>;
+
+    /// 
+    /// Get user profile
+    /// 
+    async fn get_profile(&self, username: &str) -> Result<ProfileInfo>;
 }
