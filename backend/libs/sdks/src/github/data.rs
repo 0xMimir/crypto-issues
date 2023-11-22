@@ -84,7 +84,7 @@ pub struct ProfileInfo {
     pub profile_type: ProfileType,
     pub followers: i64, // u64 but postgres doesn't support unsigned numbers,
     #[serde(rename = "blog")]
-    pub site: Option<String>,
+    pub site: String,
 }
 
 #[derive(Deserialize, Debug, Display, EnumString)]
