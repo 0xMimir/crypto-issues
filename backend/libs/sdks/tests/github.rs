@@ -54,3 +54,13 @@ async fn test_error_handling() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+async fn test_get_topic_repositories() -> Result<()> {
+    let github = Github::default();
+
+    let repositories = github.get_topic_repositories("bitcoin", 1).await?;
+    assert!(!repositories.is_empty());
+    assert_eq!(repositories.get(0).unwrap().name, "bitcoin");
+    Ok(())
+}

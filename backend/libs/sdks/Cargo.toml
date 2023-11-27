@@ -9,8 +9,10 @@ edition = "2021"
 async-trait.workspace = true
 chrono.workspace = true
 error.workspace = true
+lazy_static.workspace = true
 log.workspace = true
 reqwest.workspace = true
+scraper = "0.18.1"
 serde.workspace = true
 serde_json.workspace = true
 strum = { version = "0.25.0", features = ["derive"] }

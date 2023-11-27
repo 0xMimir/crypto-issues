@@ -92,3 +92,11 @@ pub enum ProfileType {
     User,
     Organization,
 }
+
+#[derive(Debug)]
+pub struct GithubTopicRepository {
+    pub name: String,
+    pub language: Option<String>,
+    pub stargazers_count: i64,
+    pub owner: String,
+}

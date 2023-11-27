@@ -6,3 +6,4 @@ pub mod cryptocurrencies;
 pub mod github_projects;
 pub mod github_repositories;
 pub mod issues;
+pub mod topics_repositories;
