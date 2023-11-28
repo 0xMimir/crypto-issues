@@ -3,6 +3,7 @@ FROM rust as builder
 WORKDIR /home/rust/
 COPY . .
 
+RUN rustup default nightly
 RUN cargo build --release
 
 FROM ubuntu:latest
