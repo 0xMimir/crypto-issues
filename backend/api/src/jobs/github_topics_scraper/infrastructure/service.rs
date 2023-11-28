@@ -1,5 +1,5 @@
 use error::Result;
-use sea_orm::{DatabaseConnection, EntityTrait, Statement, ConnectionTrait};
+use sea_orm::{ConnectionTrait, DatabaseConnection, EntityTrait, Statement};
 use std::sync::Arc;
 
 use super::super::contract::DbServiceContract;

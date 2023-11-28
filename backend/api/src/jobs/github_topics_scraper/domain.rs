@@ -47,7 +47,7 @@ impl<
 
     ///
     /// Download unscraped repositories
-    /// 
+    ///
     async fn handle_repositories(&self) -> Result<()> {
         let repositories = self.repository.get_unscraped_repositories().await?;
 
@@ -65,7 +65,7 @@ impl<
 
     ///
     /// Download repository and store it in db
-    /// 
+    ///
     async fn handle_repository(
         &self,
         project_name: String,
@@ -105,7 +105,7 @@ impl<
 
     ///
     /// Download unscraped projects
-    /// 
+    ///
     async fn handle_projects(&self) -> Result<()> {
         let projects = self.repository.get_unscraped_projects().await?;
         for project in projects {
@@ -119,7 +119,7 @@ impl<
 
     ///
     /// Download project and store it in db
-    /// 
+    ///
     async fn handle_project(&self, project: String) -> Result<()> {
         let ProfileInfo {
             profile_type,

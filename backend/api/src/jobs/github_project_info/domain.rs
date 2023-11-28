@@ -54,9 +54,9 @@ impl<
             match self.github.get_profile(&model.name).await {
                 Ok(profile) => {
                     let project = ActiveModel {
-                        url: Set(match profile.site.is_empty(){
+                        url: Set(match profile.site.is_empty() {
                             true => Some(profile.site),
-                            false => None
+                            false => None,
                         }),
                         followers: Set(profile.followers),
                         profile_type: Set(Some(profile.profile_type.to_string())),

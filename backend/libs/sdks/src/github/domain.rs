@@ -157,7 +157,7 @@ impl Github {
         Ok(response)
     }
 
-    fn parse_topic_repository<'a>(element: ElementRef<'a>) -> Option<GithubTopicRepository> {
+    fn parse_topic_repository(element: ElementRef<'_>) -> Option<GithubTopicRepository> {
         let name = element
             .select(&selectors::NAME)
             .next()?

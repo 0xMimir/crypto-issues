@@ -1,6 +1,6 @@
 use error::Result;
 
-use super::data::{GithubIssue, GithubRepository, RateLimit, ProfileInfo, GithubTopicRepository};
+use super::data::{GithubIssue, GithubRepository, GithubTopicRepository, ProfileInfo, RateLimit};
 
 #[async_trait]
 pub trait GithubContract {
@@ -24,18 +24,22 @@ pub trait GithubContract {
     ///
     async fn get_rate_limit(&self) -> Result<RateLimit>;
 
-    /// 
+    ///
     /// Get user profile
-    /// 
+    ///
     async fn get_profile(&self, username: &str) -> Result<ProfileInfo>;
 
     ///
     /// Get repositories for github topic, max page is 50
-    /// 
-    async fn get_topic_repositories(&self, topic: &str, page: u8) -> Result<Vec<GithubTopicRepository>>;
+    ///
+    async fn get_topic_repositories(
+        &self,
+        topic: &str,
+        page: u8,
+    ) -> Result<Vec<GithubTopicRepository>>;
 
     ///
     /// Get repository info
-    /// 
+    ///
     async fn get_repository(&self, project: &str, repository: &str) -> Result<GithubRepository>;
 }

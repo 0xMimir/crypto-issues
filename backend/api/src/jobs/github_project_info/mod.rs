@@ -2,7 +2,6 @@ mod contract;
 mod domain;
 pub mod infrastructure;
 
-
 use cronus::Cronus;
 pub use domain::GithubProjectInfo;
 use infrastructure::{PgRepository, PgService};

@@ -10,6 +10,6 @@ pub trait DbServiceContract {
 
     ///
     /// Update scraped projects
-    /// 
+    ///
     async fn update_projects(&self) -> Result<()>;
 }

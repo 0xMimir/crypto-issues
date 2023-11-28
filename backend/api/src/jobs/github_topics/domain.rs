@@ -5,7 +5,7 @@ use sdks::github::{data::GithubTopicRepository, GithubContract};
 use sea_orm::{ActiveValue::NotSet, Set};
 use store::topics_repositories::ActiveModel;
 
-const TOPICS: [&'static str; 4] = ["bitcoin", "cryptocurrency", "ethereum", "monero"];
+const TOPICS: [&str; 4] = ["bitcoin", "cryptocurrency", "ethereum", "monero"];
 
 pub struct GithubTopics<Service: DbServiceContract, Github: GithubContract> {
     service: Service,

@@ -1,5 +1,5 @@
-mod service;
 mod repository;
+mod service;
 
-pub use service::PgService;
 pub use repository::PgRepository;
+pub use service::PgService;

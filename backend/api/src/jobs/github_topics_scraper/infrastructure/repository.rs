@@ -48,7 +48,13 @@ impl DbRepositoryContract for PgRepository {
             .all(self.conn.as_ref())
             .await?
             .into_iter()
-            .map(|repo| (repo.project_name, repo.repository_name, repo.repository_owner))
+            .map(|repo| {
+                (
+                    repo.project_name,
+                    repo.repository_name,
+                    repo.repository_owner,
+                )
+            })
             .collect();
 
         Ok(repositories)
