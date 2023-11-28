@@ -33,4 +33,9 @@ pub trait GithubContract {
     /// Get repositories for github topic, max page is 50
     /// 
     async fn get_topic_repositories(&self, topic: &str, page: u8) -> Result<Vec<GithubTopicRepository>>;
+
+    ///
+    /// Get repository info
+    /// 
+    async fn get_repository(&self, project: &str, repository: &str) -> Result<GithubRepository>;
 }

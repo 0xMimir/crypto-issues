@@ -125,6 +125,11 @@ impl GithubContract for Github {
             .map(|topic| topic.ok_or(Error::InternalServer("Error parsing repository".to_owned())))
             .try_collect()
     }
+
+    async fn get_repository(&self, project: &str, repository: &str) -> Result<GithubRepository> {
+        let url = format!("https://api.github.com/repos/{}/{}", project, repository);
+        self.get(url).await
+    }
 }
 
 impl Github {
