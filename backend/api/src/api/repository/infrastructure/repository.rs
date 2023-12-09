@@ -36,7 +36,7 @@ impl DbRepositoryContract for PgRepository {
     ) -> Result<Pagination<GithubIssue>> {
         let mut query = issues::Entity::find()
             .filter(issues::Column::Repository.eq(repository_id))
-            .inner_join(issue_labels::Entity)
+            .left_join(issue_labels::Entity)
             .select_only()
             .columns([
                 issues::Column::Id,
@@ -48,7 +48,7 @@ impl DbRepositoryContract for PgRepository {
                 issues::Column::Closed,
             ])
             .column_as(
-                Expr::cust_with_expr("array_agg($1)", issue_labels::Column::Name.into_expr()),
+                Expr::cust_with_expr("array_remove(array_agg($1), null)", issue_labels::Column::Name.into_expr()),
                 "labels",
             )
             .group_by(issues::Column::Id);
