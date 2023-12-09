@@ -7,7 +7,7 @@ use sea_orm::{
 };
 use std::sync::Arc;
 use store::{
-    github_projects, github_repositories, issues,
+    github_projects, github_repositories, issue_labels, issues,
     objects::{GithubIssue, RepositoryView, SearchRepository},
 };
 use support::pagination::Pagination;
@@ -34,7 +34,24 @@ impl DbRepositoryContract for PgRepository {
         repository_id: Uuid,
         params: GetIssuesParams,
     ) -> Result<Pagination<GithubIssue>> {
-        let mut query = issues::Entity::find().filter(issues::Column::Repository.eq(repository_id));
+        let mut query = issues::Entity::find()
+            .filter(issues::Column::Repository.eq(repository_id))
+            .inner_join(issue_labels::Entity)
+            .select_only()
+            .columns([
+                issues::Column::Id,
+                issues::Column::Repository,
+                issues::Column::Issue,
+                issues::Column::Title,
+                issues::Column::Description,
+                issues::Column::CreatedAt,
+                issues::Column::Closed,
+            ])
+            .column_as(
+                Expr::cust_with_expr("array_agg($1)", issue_labels::Column::Name.into_expr()),
+                "labels",
+            )
+            .group_by(issues::Column::Id);
 
         if let Some(closed) = params.closed {
             query = query.filter(issues::Column::Closed.eq(closed));

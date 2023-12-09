@@ -51,6 +51,12 @@ pub struct GithubIssue {
     #[serde(deserialize_with = "deserialize_datetime")]
     pub updated_at: NaiveDateTime,
     pub state: State,
+    pub labels: Vec<Label>
+}
+
+#[derive(Deserialize)]
+pub struct Label{
+    pub name: String
 }
 
 #[derive(Deserialize, PartialEq, Eq)]

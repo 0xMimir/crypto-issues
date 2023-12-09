@@ -21,7 +21,7 @@ pub trait DbRepositoryContract {
 #[async_trait]
 pub trait DbServiceContract {
     ///
-    /// Create entities in `issues` table
+    /// Create single issue in `issues` table, and it's labels
     ///
-    async fn create_issues(&self, repository_id: Uuid, issues: Vec<GithubIssue>) -> Result<()>;
+    async fn create_issues(&self, repository_id: Uuid, issue: GithubIssue) -> Result<()>;
 }

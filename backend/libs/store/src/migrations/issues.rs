@@ -28,11 +28,19 @@ pub enum Relation {
         on_delete = "Cascade"
     )]
     GithubRepositories,
+    #[sea_orm(has_many = "super::issue_labels::Entity")]
+    IssueLabels,
 }
 
 impl Related<super::github_repositories::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::GithubRepositories.def()
+    }
+}
+
+impl Related<super::issue_labels::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::IssueLabels.def()
     }
 }
 

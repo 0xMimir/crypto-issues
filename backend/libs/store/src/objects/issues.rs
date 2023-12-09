@@ -12,4 +12,5 @@ pub struct GithubIssue {
     pub description: Option<String>,
     pub created_at: DateTime,
     pub closed: bool,
+    pub labels: Vec<String>
 }

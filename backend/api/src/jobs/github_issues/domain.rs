@@ -1,5 +1,6 @@
 use cronus::{Job, Schedule};
 use error::{Error, Result};
+use futures::future::join_all;
 use sdks::github::GithubContract;
 use std::time::Duration;
 use store::{
@@ -88,7 +89,15 @@ impl<
                 break;
             }
 
-            self.service.create_issues(repository.id, issues).await?;
+            let futures = issues
+                .into_iter()
+                .map(|issue| self.service.create_issues(repository.id, issue));
+
+            let results = join_all(futures).await;
+            for result in results {
+                result?;
+            }
+
             page += 1;
         }
 

@@ -25,6 +25,7 @@ store.workspace = true
 support.workspace = true
 config.workspace = true
 actix-cors.workspace = true
+futures = "0.3.29"
 
 [dev-dependencies]
 adtest.workspace = true

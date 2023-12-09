@@ -3,5 +3,6 @@
 pub use super::cryptocurrencies::Entity as Cryptocurrencies;
 pub use super::github_projects::Entity as GithubProjects;
 pub use super::github_repositories::Entity as GithubRepositories;
+pub use super::issue_labels::Entity as IssueLabels;
 pub use super::issues::Entity as Issues;
 pub use super::topics_repositories::Entity as TopicsRepositories;
